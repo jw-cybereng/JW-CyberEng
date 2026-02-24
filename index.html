@@ -1,0 +1,2768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <!-- SEO (Global) -->
+  <title>CyberEng – Learn Cybersecurity</title>
+  <meta name="description" content="Aprende inglés técnico de ciberseguridad con pronunciación americana. Curso gratuito para estudiantes panameños."/>
+  <meta name="keywords" content="inglés ciberseguridad Panamá, aprende inglés técnico, pronunciación americana, vocabulario"/>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root{
+      --bg-primary:#000000;
+      --bg-secondary:#001122;
+      --accent-primary:#00FF00;
+      --accent-secondary:#00BFFF;
+      --text-main:#FFFFFF;
+      --text-muted:#CCCCCC;
+      --error-color:#FF4444;
+
+      --font-title:'Courier New','Courier Prime','Roboto Mono',monospace;
+      --font-subtitle:'Orbitron','Space Grotesk',sans-serif;
+      --font-body:'Courier New','Roboto Mono','Courier Prime',monospace;
+    }
+
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{
+      background:var(--bg-primary);
+      color:var(--text-main);
+      font-family:var(--font-body);
+      line-height:1.6;
+      overflow-x:hidden;
+    }
+
+    /* Skip link */
+    .skip-link{
+      position:absolute; left:-999px; top:0;
+      background:var(--accent-primary); color:#000;
+      padding:10px 12px; z-index:9999; border-radius:6px;
+      font-weight:900; text-decoration:none;
+    }
+    .skip-link:focus{left:10px; top:10px; outline:none}
+
+    /* Matrix Background */
+    #matrixCanvas{
+      position:fixed; inset:0;
+      width:100vw; height:100vh;
+      z-index:-1;
+      opacity:0.28; /* 25–30% */
+      pointer-events:none;
+    }
+
+    /* Typography */
+    h1,h2{font-family:var(--font-title); color:var(--accent-primary); font-weight:700}
+    h3,h4,h5{font-family:var(--font-subtitle); color:var(--accent-secondary); font-weight:700}
+    p,li,label,td,th{font-family:var(--font-body)}
+    .muted{color:var(--text-muted)}
+
+    /* Animations */
+    .fade-in{animation:fadeIn 1s ease-in forwards}
+    .slide-in{animation:slideInBottom .8s ease-out forwards}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    @keyframes slideInBottom{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+    /* Header */
+    header{
+      background:var(--bg-secondary);
+      border-bottom:2px solid var(--accent-primary);
+      box-shadow:0 0 15px rgba(0,255,0,.4);
+      padding:15px 30px;
+      position:sticky; top:0; z-index:100;
+      display:flex; align-items:center; justify-content:space-between;
+      gap:18px;
+    }
+    .logo{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:260px;
+    }
+    .logo-text{display:flex; flex-direction:column}
+    .logo h1{font-size:28px; text-shadow:0 0 6px var(--accent-primary); line-height:1.1}
+    .logo p{font-size:12px; color:var(--accent-secondary)}
+    .logo-lock{
+      width:46px; height:46px;
+      flex:0 0 auto;
+      filter:drop-shadow(0 0 10px rgba(0,255,0,.35));
+      border-radius:8px;
+      border:1px solid rgba(0,255,0,.35);
+      background:rgba(0,0,0,.25);
+      padding:6px;
+    }
+
+    nav{position:relative}
+    nav ul{
+      list-style:none;
+      display:flex; gap:14px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    nav a{
+      color:var(--accent-secondary);
+      text-decoration:none;
+      font-size:13px;
+      font-weight:700;
+      cursor:pointer;
+      transition:color .25s, text-shadow .25s;
+      padding:6px 8px;
+      border-radius:4px;
+      font-family:var(--font-body);
+    }
+    nav a:hover, nav a.active{
+      color:var(--accent-primary);
+      text-shadow:0 0 10px var(--accent-primary);
+      outline:1px solid rgba(0,255,0,.25);
+    }
+    .menu-toggle{
+      display:none;
+      color:var(--accent-primary);
+      font-size:24px;
+      background:none;
+      border:none;
+      cursor:pointer;
+      padding:8px 10px;
+    }
+
+    /* Main */
+    main{
+      max-width:1200px;
+      margin:0 auto;
+      padding:26px 20px 40px;
+      min-height:80vh;
+    }
+    .page-section{display:none; animation:fadeIn .5s}
+    .page-section.active{display:block}
+
+    /* Parallax Strips */
+    .parallax-strip{
+      position:relative;
+      overflow:hidden;
+      border:1px solid rgba(0,255,0,.25);
+      background:
+        radial-gradient(circle at 20% 20%, rgba(0,191,255,.10), transparent 50%),
+        radial-gradient(circle at 80% 30%, rgba(0,255,0,.10), transparent 55%),
+        linear-gradient(90deg, rgba(0,255,0,.08), rgba(0,191,255,.06));
+      background-size:120% 120%;
+      background-position:50% 0%;
+      border-radius:6px;
+    }
+    .strip-pad{padding:28px}
+
+    /* Buttons */
+    .btn{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      justify-content:center;
+      background:var(--accent-primary);
+      color:#000;
+      font-weight:800;
+      padding:12px 18px;
+      border:none;
+      border-radius:4px;
+      cursor:pointer;
+      text-decoration:none;
+      transition:transform .2s, box-shadow .2s, background .2s;
+      font-family:var(--font-body);
+      font-size:16px;
+      min-height:44px;
+    }
+    .btn:hover{background:var(--accent-secondary); box-shadow:0 0 25px var(--accent-primary); transform:scale(1.05)}
+    .btn-outline{
+      background:transparent;
+      color:var(--accent-secondary);
+      border:1px solid var(--accent-secondary);
+      font-weight:800;
+    }
+    .btn-outline:hover{background:rgba(0,191,255,.08)}
+    .btn-danger{
+      background:transparent;
+      border:1px solid var(--error-color);
+      color:var(--error-color);
+    }
+    .btn-danger:hover{box-shadow:0 0 25px rgba(255,68,68,.35)}
+
+    /* Cards */
+    .card{
+      background:rgba(0,17,34,.9);
+      border:1px solid var(--accent-primary);
+      padding:22px;
+      border-radius:6px;
+      transition:transform .25s, box-shadow .25s;
+    }
+    .card:hover{box-shadow:0 0 20px rgba(0,255,0,.3); transform:translateY(-5px)}
+    .card-blue{border-color:var(--accent-secondary)}
+    .card-blue:hover{box-shadow:0 0 20px rgba(0,191,255,.25)}
+    .card-red{border-color:var(--error-color)}
+    .card-red:hover{box-shadow:0 0 20px rgba(255,68,68,.22)}
+    .card-yellow{border-color:#FFD700}
+    .card-yellow:hover{box-shadow:0 0 22px rgba(255,215,0,.25)}
+
+    .grid-2{display:grid; grid-template-columns:repeat(2,1fr); gap:20px}
+    .grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:20px}
+    .grid-4{display:grid; grid-template-columns:repeat(4,1fr); gap:20px}
+
+    /* Speak */
+    .speak-btn{
+      background:transparent;
+      border:none;
+      color:var(--accent-secondary);
+      font-size:18px;
+      cursor:pointer;
+      margin-left:8px;
+      transition:transform .15s, color .15s;
+      padding:6px 8px;
+    }
+    .speak-btn:hover{transform:scale(1.15); color:var(--accent-primary)}
+    .speak-inline{margin-left:6px; font-size:16px}
+    .kbd{
+      font-family:var(--font-body);
+      padding:2px 7px;
+      border:1px solid rgba(0,255,0,.35);
+      border-radius:6px;
+      color:var(--accent-primary);
+      background:rgba(0,0,0,.35);
+      font-size:12px;
+      white-space:nowrap;
+    }
+
+    /* Tables */
+    .table-wrap{overflow-x:auto}
+    table{
+      width:100%;
+      border-collapse:collapse;
+      background:var(--bg-secondary);
+      border:1px solid var(--accent-primary);
+      margin:18px 0;
+    }
+    th,td{
+      padding:12px;
+      border:1px solid var(--accent-primary);
+      text-align:left;
+      vertical-align:top;
+      min-width:120px;
+    }
+    th{
+      background:var(--accent-primary);
+      color:#000;
+      font-weight:900;
+    }
+    tr:hover{box-shadow:inset 0 0 10px rgba(0,255,0,.2)}
+    .th-blue th{background:var(--accent-secondary); color:#001122}
+
+    /* Quizzes */
+    .quiz-question{
+      margin:18px 0;
+      padding:16px;
+      border:1px dashed var(--text-muted);
+      border-radius:6px;
+      background:rgba(0,0,0,.25);
+    }
+    .quiz-question h5{color:var(--text-main); font-size:16px; margin-bottom:10px; font-family:var(--font-body)}
+    .quiz-options label{display:block; margin:8px 0; cursor:pointer; color:var(--text-muted)}
+    .quiz-options input{margin-right:8px}
+    .quiz-feedback{
+      display:none;
+      margin-top:10px;
+      padding:10px;
+      border-radius:4px;
+      font-weight:900;
+    }
+    .feedback-correct{background:rgba(0,255,0,.18); color:var(--accent-primary); border-left:4px solid var(--accent-primary)}
+    .feedback-incorrect{background:rgba(255,68,68,.14); color:var(--error-color); border-left:4px solid var(--error-color)}
+    .answer-key{
+      margin-top:16px;
+      padding:14px;
+      border:1px solid rgba(0,255,0,.35);
+      border-radius:6px;
+      background:rgba(0,17,34,.65);
+    }
+    .answer-key h4{margin-bottom:8px}
+    .answer-key ol{margin-left:20px}
+    .answer-key li{margin:6px 0; color:var(--text-muted)}
+    .answer-key strong{color:var(--accent-secondary)}
+    .pill{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding:7px 14px;
+      border-radius:999px;
+      background:rgba(0,255,0,.10);
+      border:1px solid rgba(0,255,0,.35);
+      color:var(--accent-primary);
+      font-weight:900;
+      font-size:12px;
+    }
+
+    /* Inputs */
+    input[type="text"], input[type="email"], select, textarea{
+      width:100%;
+      padding:10px;
+      background:#000;
+      border:1px solid rgba(0,255,0,.45);
+      color:#fff;
+      border-radius:6px;
+      outline:none;
+      font-family:var(--font-body);
+    }
+    textarea{min-height:90px; resize:vertical}
+
+    /* Footer */
+    footer{
+      background:var(--bg-secondary);
+      border-top:1px solid var(--accent-primary);
+      padding:40px 20px;
+      margin-top:40px;
+    }
+    .footer-grid{
+      max-width:1200px;
+      margin:0 auto;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:30px;
+    }
+    .footer-grid h4{color:var(--accent-primary); margin-bottom:15px}
+    .social-icons a{
+      font-size:34px;
+      margin-right:14px;
+      text-decoration:none;
+      transition:transform .2s, filter .2s;
+      display:inline-block;
+    }
+    .social-icons a:hover{transform:scale(1.15); filter:drop-shadow(0 0 10px rgba(0,255,0,.45))}
+    .icon-wa{color:#25D366}
+    .icon-mail{color:#EA4335}
+    .icon-ig{color:#E1306C}
+    .icon-tt{color:#FFFFFF; text-shadow:0 0 10px rgba(255,255,255,.15)}
+
+    /* Hero */
+    .hero{
+      min-height:calc(100vh - 84px);
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:26px;
+      align-items:center;
+      padding:24px 0 10px;
+      position:relative;
+    }
+    .hero::before{
+      content:"";
+      position:absolute; inset:-20px;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.60), rgba(0,0,0,.92)),
+        radial-gradient(circle at 30% 30%, rgba(0,255,0,.12), transparent 45%),
+        radial-gradient(circle at 70% 40%, rgba(0,191,255,.10), transparent 46%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='920' height='520'%3E%3Crect width='100%25' height='100%25' fill='black'/%3E%3Cg fill='%2300FF00' fill-opacity='0.18' font-family='Courier New, monospace' font-size='14'%3E%3Ctext x='18' y='30'%3E01001001 01010000 00100000 00110001 00111001%3C/text%3E%3Ctext x='18' y='55'%3Efunction secure()%7B return true%3B %7D%3C/text%3E%3Ctext x='18' y='80'%3EGET /api/v1/auth HTTP/1.1%3C/text%3E%3Ctext x='18' y='105'%3ETLS%201.3%20%7C%20AES-256-GCM%20%7C%20SHA-256%3C/text%3E%3Ctext x='18' y='130'%3E%5BINFO%5D firewall: allow 443 deny 23%3C/text%3E%3Ctext x='18' y='155'%3E%5BALERT%5D phishing_detected=true%3C/text%3E%3Ctext x='18' y='180'%3Ehash=9f86d081884c7d659a2feaa0c55ad015%3C/text%3E%3Ctext x='18' y='205'%3E%7B%22incident%22:%22data_breach%22,%22severity%22:%22critical%22%7D%3C/text%3E%3C/g%3E%3C/svg%3E");
+      background-size:cover;
+      background-repeat:no-repeat;
+      background-position:center;
+      pointer-events:none;
+      z-index:-1;
+      opacity:.25;
+    }
+    .hero-title{font-size:72px; letter-spacing:1px}
+    .hero-subtitle{font-size:24px; margin-top:10px}
+    .hero-desc{max-width:700px; margin-top:16px; font-size:16px; color:var(--text-muted)}
+    .hero-art{
+      height:420px;
+      border-radius:10px;
+      border:1px solid rgba(0,255,0,.4);
+      background:
+        radial-gradient(circle at 25% 30%, rgba(0,255,0,.20), transparent 45%),
+        radial-gradient(circle at 75% 35%, rgba(0,191,255,.18), transparent 52%),
+        linear-gradient(135deg, rgba(0,17,34,.75), rgba(0,0,0,.85));
+      box-shadow:0 0 30px rgba(0,255,0,.12);
+      position:relative;
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:14px;
+    }
+    .hero-art::after{
+      content:"";
+      position:absolute; inset:-40px;
+      background:
+        linear-gradient(90deg, rgba(0,255,0,.0), rgba(0,255,0,.14), rgba(0,255,0,.0));
+      transform:rotate(20deg) translateX(-40%);
+      animation:scan 4.5s linear infinite;
+      opacity:.65;
+      pointer-events:none;
+    }
+    @keyframes scan{
+      0%{transform:rotate(20deg) translateX(-70%)}
+      100%{transform:rotate(20deg) translateX(70%)}
+    }
+    .hero-svg{
+      width:100%;
+      height:100%;
+      max-height:392px;
+      filter:drop-shadow(0 0 18px rgba(0,255,0,.18));
+    }
+
+    /* Stars */
+    .stars{display:flex; gap:6px; font-size:28px; color:rgba(0,255,0,.25); cursor:pointer}
+    .stars button{
+      background:none; border:none; cursor:pointer;
+      font-size:28px; line-height:1;
+      color:rgba(0,255,0,.25);
+      padding:4px;
+    }
+    .stars button.active{color:var(--accent-primary); text-shadow:0 0 10px rgba(0,255,0,.35)}
+    .chip{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid rgba(0,191,255,.35);
+      color:var(--accent-secondary);
+      background:rgba(0,191,255,.06);
+      font-size:12px;
+      font-weight:900;
+    }
+
+    /* Responsive */
+    @media(max-width: 900px){
+      .grid-3,.grid-4,.footer-grid{grid-template-columns:repeat(2,1fr)}
+      .hero{grid-template-columns:1fr; min-height:auto}
+      .hero-art{height:340px}
+    }
+    @media(max-width: 600px){
+      .grid-2,.grid-3,.grid-4,.footer-grid{grid-template-columns:1fr}
+      .hero-title{font-size:36px}
+      h2{font-size:28px}
+      .menu-toggle{display:block}
+      header{padding:12px 16px}
+      nav ul{
+        display:none;
+        flex-direction:column;
+        width:100%;
+        background:var(--bg-secondary);
+        position:absolute;
+        top:68px; left:0;
+        padding:20px;
+        border-bottom:2px solid var(--accent-primary);
+      }
+      nav ul.show{display:flex}
+      .logo{min-width:unset}
+    }
+  </style>
+</head>
+
+<body>
+  <a class="skip-link" href="#mainContent">Skip to content</a>
+  <canvas id="matrixCanvas"></canvas>
+
+  <!-- Global Header -->
+  <header>
+    <div class="logo">
+      <div class="logo-text">
+        <h1>JW-CyberEng</h1>
+        <p>Learn Cybersecurity</p>
+      </div>
+
+      <!-- Cybersecurity lock image -->
+      <img
+        class="logo-lock"
+        alt="Cybersecurity lock"
+        src='data:image/svg+xml;utf8,
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+            <defs>
+              <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="%2300FF00"/>
+                <stop offset="1" stop-color="%2300BFFF"/>
+              </linearGradient>
+              <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="1.8" result="b"/>
+                <feMerge>
+                  <feMergeNode in="b"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+            <rect x="1" y="1" width="62" height="62" rx="10" fill="%23001122" stroke="%2300FF00" stroke-opacity="0.55"/>
+            <path d="M20 28v-6c0-6.6 5.4-12 12-12s12 5.4 12 12v6" fill="none" stroke="url(%23g)" stroke-width="3.2" filter="url(%23glow)" stroke-linecap="round"/>
+            <rect x="16" y="28" width="32" height="28" rx="6" fill="%23000000" stroke="url(%23g)" stroke-width="3.2" filter="url(%23glow)"/>
+            <circle cx="32" cy="42" r="4.2" fill="%2300FF00" opacity="0.9"/>
+            <path d="M32 46v6" stroke="%2300FF00" stroke-width="3" stroke-linecap="round" opacity="0.9"/>
+            <path d="M8 18h10M46 18h10M8 46h10M46 46h10" stroke="%2300BFFF" stroke-width="2" opacity="0.65"/>
+            <path d="M12 18v6M52 18v6M12 40v6M52 40v6" stroke="%2300BFFF" stroke-width="2" opacity="0.65"/>
+          </svg>'
+      />
+    </div>
+
+    <button class="menu-toggle" onclick="toggleMenu()" aria-label="Open menu">
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <nav aria-label="Primary">
+      <ul id="navMenu">
+        <li><a data-page="home" class="active" onclick="navigate('home', this)">Home</a></li>
+        <li><a data-page="alphabet" onclick="navigate('alphabet', this)">Alphabet</a></li>
+        <li><a data-page="sounds" onclick="navigate('sounds', this)">Sound System</a></li>
+        <li><a data-page="vocabulary" onclick="navigate('vocabulary', this)">Vocabulary</a></li>
+        <li><a data-page="reading" onclick="navigate('reading', this)">Technical Reading</a></li>
+        <li><a data-page="practice" onclick="navigate('practice', this)">Exercises</a></li>
+        <li><a data-page="evaluation" onclick="navigate('evaluation', this)">Final Test</a></li>
+        <li><a data-page="author" onclick="navigate('author', this)">Author</a></li>
+        <li><a data-page="comments" onclick="navigate('comments', this)">Comments</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="mainContent">
+    <!-- PAGE 1: HOME -->
+    <section id="home" class="page-section active">
+      <div class="hero">
+        <div>
+          <h1 class="hero-title fade-in">LEARN CYBERSECURITY</h1>
+          <h3 class="hero-subtitle slide-in">Technical English for Cybersecurity</h3>
+          <p class="hero-desc slide-in">
+            Welcome to JW-CyberEng, an educational platform created by William Jimenez, a Panamanian student at the
+            <strong>Technological University of Panama (UTP)</strong>. Learn General American pronunciation, specialized cybersecurity vocabulary,
+            and technical reading comprehension.
+          </p>
+
+          <div style="margin-top:18px; display:flex; gap:12px; flex-wrap:wrap;">
+            <button class="btn slide-in"
+              onclick="navigate('alphabet', document.querySelector('nav a[data-page=&quot;alphabet&quot;]'))">
+              START <i class="fas fa-arrow-right"></i>
+            </button>
+            <button class="btn btn-outline slide-in"
+              onclick="navigate('sounds', document.querySelector('nav a[data-page=&quot;sounds&quot;]'))">
+              SOUND SYSTEM <i class="fa-solid fa-wave-square"></i>
+            </button>
+            <button class="btn btn-outline slide-in" onclick="scrollToEl('#homeModules')">
+              VIEW MODULES <i class="fas fa-layer-group"></i>
+            </button>
+          </div>
+
+          <div style="margin-top:18px;">
+            <span class="chip"><i class="fa-solid fa-location-dot"></i> Panama</span>
+            <span class="chip" style="margin-left:8px;"><i class="fa-solid fa-headphones"></i> Pronunciation audio included</span>
+          </div>
+        </div>
+
+        <!-- Replaced empty space with a cybersecurity illustration -->
+        <div class="hero-art" aria-hidden="true">
+          <svg class="hero-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 520" role="img" aria-label="Cybersecurity illustration">
+            <defs>
+              <linearGradient id="neon" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#00FF00"/>
+                <stop offset="1" stop-color="#00BFFF"/>
+              </linearGradient>
+              <radialGradient id="glowG" cx="50%" cy="50%" r="65%">
+                <stop offset="0" stop-color="#00FF00" stop-opacity=".35"/>
+                <stop offset="1" stop-color="#00FF00" stop-opacity="0"/>
+              </radialGradient>
+              <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur stdDeviation="4" result="b"/>
+                <feMerge>
+                  <feMergeNode in="b"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+              <pattern id="grid" width="26" height="26" patternUnits="userSpaceOnUse">
+                <path d="M26 0H0V26" fill="none" stroke="#00BFFF" stroke-opacity=".12" stroke-width="1"/>
+              </pattern>
+            </defs>
+
+            <rect x="0" y="0" width="920" height="520" fill="url(#grid)"/>
+            <circle cx="460" cy="250" r="220" fill="url(#glowG)"/>
+
+            <!-- Circuit lines -->
+            <g stroke="url(#neon)" stroke-opacity=".35" stroke-width="2" fill="none">
+              <path d="M120 110H310m-60 0v70h60" />
+              <path d="M800 140H610m60 0v80h-60" />
+              <path d="M150 420H320m-60 0v-70h60" />
+              <path d="M770 410H600m60 0v-90h-60" />
+              <path d="M460 70v70m0 260v70" />
+            </g>
+
+            <!-- Nodes -->
+            <g fill="#00FF00" opacity=".7" filter="url(#softGlow)">
+              <circle cx="120" cy="110" r="6"/><circle cx="800" cy="140" r="6"/>
+              <circle cx="150" cy="420" r="6"/><circle cx="770" cy="410" r="6"/>
+              <circle cx="460" cy="70" r="6"/><circle cx="460" cy="470" r="6"/>
+            </g>
+
+            <!-- Shield -->
+            <g transform="translate(0,0)" filter="url(#softGlow)">
+              <path d="M460 120c90 40 165 40 165 40v140c0 120-95 165-165 190-70-25-165-70-165-190V160s75 0 165-40z"
+                    fill="rgba(0,17,34,.75)" stroke="url(#neon)" stroke-width="4"/>
+              <path d="M460 165c66 30 120 30 120 30v105c0 86-70 120-120 140-50-20-120-54-120-140V195s54 0 120-30z"
+                    fill="rgba(0,0,0,.55)" stroke="rgba(0,191,255,.55)" stroke-width="3"/>
+            </g>
+
+            <!-- Lock -->
+            <g transform="translate(0,0)" filter="url(#softGlow)">
+              <path d="M392 270v-22c0-44 30-76 68-76s68 32 68 76v22"
+                    fill="none" stroke="url(#neon)" stroke-width="8" stroke-linecap="round"/>
+              <rect x="360" y="270" width="200" height="170" rx="18"
+                    fill="rgba(0,0,0,.75)" stroke="url(#neon)" stroke-width="8"/>
+              <circle cx="460" cy="350" r="20" fill="#00FF00" opacity=".85"/>
+              <path d="M460 370v42" stroke="#00FF00" stroke-width="10" stroke-linecap="round" opacity=".85"/>
+            </g>
+
+            <!-- Tiny "code" -->
+            <g fill="#00BFFF" fill-opacity=".55" font-family="Courier New, monospace" font-size="14">
+              <text x="230" y="100">TLS 1.3 • AES-256 • MFA • Zero Trust</text>
+              <text x="235" y="470">firewall allow 443 deny 23 • IDS alert</text>
+              <text x="270" y="490">hash: 9f86d081884c7d... • patch now</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <div class="parallax-strip" data-parallax="0.25" style="margin-top:26px;">
+        <div class="strip-pad">
+          <h2 class="fade-in" style="font-size:32px; text-align:center;">Why is English essential in cybersecurity?</h2>
+          <p class="muted" style="text-align:center; margin-top:10px;">
+            Most tools, documentation, and global teams communicate in English. If you can read and say the terms correctly, you move faster and make fewer mistakes.
+          </p>
+
+          <div class="grid-3" style="margin-top:22px;">
+            <div class="card slide-in" style="animation-delay:.1s;">
+              <h4><i class="fas fa-globe"></i> GLOBAL COMMUNICATION</h4>
+              <p style="margin-top:10px;" class="muted">
+                Around 95% of technical documentation, security tools, and international certifications (CEH, CISSP, CompTIA) are in English.
+              </p>
+            </div>
+            <div class="card slide-in" style="animation-delay:.2s;">
+              <h4><i class="fas fa-tools"></i> TECHNICAL TOOLS</h4>
+              <p style="margin-top:10px;" class="muted">
+                Kali Linux, Wireshark, Metasploit, OWASP, and most frameworks use terminology primarily in English.
+              </p>
+            </div>
+            <div class="card slide-in" style="animation-delay:.3s;">
+              <h4><i class="fas fa-briefcase"></i> CAREER OPPORTUNITIES</h4>
+              <p style="margin-top:10px;" class="muted">
+                Technical English unlocks international jobs, remote work, and access to global cybersecurity communities.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:34px;" class="parallax-strip" data-parallax="0.18">
+        <div class="strip-pad">
+          <h3 style="margin-bottom:12px; color:var(--accent-secondary);">Course Objectives</h3>
+          <ul style="list-style:none; line-height:2.05;">
+            <li><i class="fas fa-check" style="color:var(--accent-primary);"></i> Improve your General American pronunciation.</li>
+            <li><i class="fas fa-check" style="color:var(--accent-primary);"></i> Master specialized cybersecurity vocabulary in English.</li>
+            <li><i class="fas fa-check" style="color:var(--accent-primary);"></i> Develop reading comprehension for technical texts.</li>
+            <li><i class="fas fa-check" style="color:var(--accent-primary);"></i> Practice with interactive exercises and evaluations.</li>
+            <li><i class="fas fa-check" style="color:var(--accent-primary);"></i> Prepare for international certifications in English.</li>
+          </ul>
+
+          <button class="btn btn-outline" style="margin-top:16px;" onclick="scrollToEl('#homeModules')">
+            VIEW MODULES <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <div id="homeModules" style="margin-top:42px;">
+        <h2 style="text-align:center; margin-bottom:18px;">📚 Course Modules</h2>
+        <div class="grid-4">
+          <div class="card">
+            <h4 style="color:var(--accent-primary);">1. Alphabet</h4>
+            <p class="muted" style="font-size:13px; margin:10px 0;">
+              The American English alphabet with IPA guidance and common mistakes for Spanish speakers.
+            </p>
+            <button class="btn btn-outline" style="width:100%; font-size:13px;"
+              onclick="navigate('alphabet', document.querySelector('nav a[data-page=&quot;alphabet&quot;]'))">
+              Go to Alphabet
+            </button>
+          </div>
+
+          <div class="card">
+            <h4 style="color:var(--accent-primary);">2. Sound System</h4>
+            <p class="muted" style="font-size:13px; margin:10px 0;">
+              General American sound system: IPA symbols, vowels, diphthongs, and consonants with audio.
+            </p>
+            <button class="btn btn-outline" style="width:100%; font-size:13px;"
+              onclick="navigate('sounds', document.querySelector('nav a[data-page=&quot;sounds&quot;]'))">
+              Go to Sound System
+            </button>
+          </div>
+
+          <div class="card">
+            <h4 style="color:var(--accent-primary);">3. Vocabulary</h4>
+            <p class="muted" style="font-size:13px; margin:10px 0;">
+              24 essential cybersecurity terms with American IPA, bilingual definitions, context, and audio.
+            </p>
+            <button class="btn btn-outline" style="width:100%; font-size:13px;"
+              onclick="navigate('vocabulary', document.querySelector('nav a[data-page=&quot;vocabulary&quot;]'))">
+              Go to Vocabulary
+            </button>
+          </div>
+
+          <div class="card">
+            <h4 style="color:var(--accent-primary);">4. Technical Reading</h4>
+            <p class="muted" style="font-size:13px; margin:10px 0;">
+              Real cybersecurity readings with glossary, audio support, and comprehension questions.
+            </p>
+            <button class="btn btn-outline" style="width:100%; font-size:13px;"
+              onclick="navigate('reading', document.querySelector('nav a[data-page=&quot;reading&quot;]'))">
+              Go to Technical Reading
+            </button>
+          </div>
+
+          <div class="card">
+            <h4 style="color:var(--accent-primary);">5. Exercises</h4>
+            <p class="muted" style="font-size:13px; margin:10px 0;">
+              Interactive practice: phonetics, vocabulary in context, and a real security mini-case.
+            </p>
+            <button class="btn btn-outline" style="width:100%; font-size:13px;"
+              onclick="navigate('practice', document.querySelector('nav a[data-page=&quot;practice&quot;]'))">
+              Go to Exercises
+            </button>
+          </div>
+
+          <div class="card">
+            <h4 style="color:var(--accent-primary);">6. Final Test</h4>
+            <p class="muted" style="font-size:13px; margin:10px 0;">
+              Full 30-question exam covering phonetics, vocabulary, and reading with automatic scoring.
+            </p>
+            <button class="btn btn-outline" style="width:100%; font-size:13px;"
+              onclick="navigate('evaluation', document.querySelector('nav a[data-page=&quot;evaluation&quot;]'))">
+              Go to Final Test
+            </button>
+          </div>
+
+          <div class="card">
+            <h4 style="color:var(--accent-primary);">7. Author</h4>
+            <p class="muted" style="font-size:13px; margin:10px 0;">
+              Meet the creator and find complete contact details.
+            </p>
+            <button class="btn btn-outline" style="width:100%; font-size:13px;"
+              onclick="navigate('author', document.querySelector('nav a[data-page=&quot;author&quot;]'))">
+              View Profile
+            </button>
+          </div>
+
+          <div class="card">
+            <h4 style="color:var(--accent-primary);">8. Comments</h4>
+            <p class="muted" style="font-size:13px; margin:10px 0;">
+              Leave your rating and suggestions to improve CyberEng.
+            </p>
+            <button class="btn btn-outline" style="width:100%; font-size:13px;"
+              onclick="navigate('comments', document.querySelector('nav a[data-page=&quot;comments&quot;]'))">
+              Leave a Comment
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 2: ALPHABET -->
+    <section id="alphabet" class="page-section">
+      <h1 class="fade-in" style="font-size:48px;"><i class="fa-solid fa-font"></i> The American English Alphabet</h1>
+      <p class="muted" style="margin:16px 0; max-width:900px;">
+        The English alphabet has 26 letters. The names of letters in English are different from the sounds they represent.
+        This difference is critical when spelling technical terms (for example, when configuring a system or speaking with international tech support).
+      </p>
+
+      <div class="parallax-strip" data-parallax="0.12">
+        <div class="strip-pad">
+          <h3>Complete Alphabet Table (with audio)</h3>
+          <p class="muted" style="margin-top:8px;">
+            Use the speaker icons to hear the letter name and the IPA transcription.
+          </p>
+          <div class="table-wrap" id="alphabetTableWrap"></div>
+        </div>
+      </div>
+
+      <div class="parallax-strip" data-parallax="0.18" style="margin-top:26px; border-color:rgba(255,68,68,.35)">
+        <div class="strip-pad">
+          <h3 style="color:var(--error-color);"><i class="fa-solid fa-triangle-exclamation"></i> Five critical alphabet errors</h3>
+          <div class="grid-3" style="margin-top:16px;" id="alphabetErrors"></div>
+        </div>
+      </div>
+
+      <div style="margin-top:26px;" class="parallax-strip" data-parallax="0.16">
+        <div class="strip-pad">
+          <h3>Alphabet Quiz (10 questions)</h3>
+          <p class="muted">After you submit, you will see feedback and the answer key at the end.</p>
+          <form id="quizAlphabet"></form>
+          <button class="btn" type="button" onclick="gradeQuiz('quizAlphabet')">
+            Submit Alphabet Quiz <i class="fa-solid fa-check"></i>
+          </button>
+          <div id="res-quizAlphabet" style="margin-top:12px; font-weight:900;"></div>
+
+          <div class="answer-key" id="key-quizAlphabet">
+            <h4>Answer Key (Alphabet Quiz)</h4>
+            <ol id="keyList-quizAlphabet"></ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 3: SOUND SYSTEM -->
+    <section id="sounds" class="page-section">
+      <h1 class="fade-in" style="font-size:48px;"><i class="fa-solid fa-wave-square"></i> American English Sound System</h1>
+      <p class="muted" style="margin:16px 0; max-width:980px;">
+        General American has a precise phonetic system where each IPA symbol represents a unique sound. This module covers
+        vowels (monophthongs), diphthongs, and consonants (voiced and unvoiced), with cybersecurity examples and pronunciation audio.
+      </p>
+      <div class="pill"><i class="fa-solid fa-signal"></i> Module 2 of 6</div>
+
+      <div class="parallax-strip" data-parallax="0.14" style="margin-top:22px;">
+        <div class="strip-pad">
+          <h3 style="color:var(--accent-secondary);">A. Vowels – Monophthongs</h3>
+          <p class="muted">Tap the speaker to hear a short sample that matches the IPA symbol.</p>
+          <div class="grid-3" style="margin-top:16px;" id="monoGrid"></div>
+        </div>
+      </div>
+
+      <div class="parallax-strip" data-parallax="0.12" style="margin-top:26px;">
+        <div class="strip-pad">
+          <h3 style="color:var(--accent-primary);">B. Diphthongs</h3>
+          <p class="muted">Diphthongs glide between two vowel positions in one syllable.</p>
+          <div class="grid-3" style="margin-top:16px;" id="diphGrid"></div>
+        </div>
+      </div>
+
+      <!-- Consonants must be stacked (not side-by-side) -->
+      <div class="parallax-strip" data-parallax="0.16" style="margin-top:26px;">
+        <div class="strip-pad">
+          <h3 style="color:var(--text-muted);">C. Consonants (with audio)</h3>
+
+          <div class="card" style="margin-top:14px;">
+            <h4>Voiced consonants (vocal folds vibrate)</h4>
+            <div class="table-wrap" id="voicedTable"></div>
+          </div>
+
+          <div class="card" style="margin-top:14px;">
+            <h4>Unvoiced consonants (no vibration)</h4>
+            <div class="table-wrap" id="unvoicedTable"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="parallax-strip" data-parallax="0.18" style="margin-top:26px; border-color:rgba(255,68,68,.35)">
+        <div class="strip-pad">
+          <h3 style="color:var(--error-color);"><i class="fa-solid fa-triangle-exclamation"></i> Critical errors (Spanish speakers)</h3>
+          <div class="grid-3" style="margin-top:16px;" id="soundErrors"></div>
+        </div>
+      </div>
+
+      <div class="parallax-strip" data-parallax="0.14" style="margin-top:26px;">
+        <div class="strip-pad">
+          <h3>Quiz: Sound System (15 questions, pass = 70%)</h3>
+          <p class="muted">Answer key is shown below the quiz.</p>
+          <form id="quizSounds"></form>
+          <button class="btn" type="button" onclick="gradeSoundQuiz()">
+            Submit Sound Quiz <i class="fa-solid fa-check"></i>
+          </button>
+          <div id="res-quizSounds" style="margin-top:12px; font-weight:900;"></div>
+
+          <div class="answer-key" id="key-quizSounds">
+            <h4>Answer Key (Sound System Quiz)</h4>
+            <ol id="keyList-quizSounds"></ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 4: VOCABULARY -->
+    <section id="vocabulary" class="page-section">
+      <h1 class="fade-in" style="font-size:48px;"><i class="fa-solid fa-shield-halved"></i> Cybersecurity Vocabulary</h1>
+      <p class="muted" style="margin:16px 0; max-width:980px;">
+        Mastering technical vocabulary in English is essential. Documentation, tools, certifications, and professional communication use these terms.
+        Each entry includes American IPA, a simple technical definition, a Spanish definition (for Panamanian learners), real context, and audio pronunciation.
+      </p>
+
+      <div class="parallax-strip" data-parallax="0.14" style="margin-top:20px; border-left:4px solid var(--error-color);">
+        <div class="strip-pad">
+          <h3><i class="fa-solid fa-bug"></i> A. ATTACKS</h3>
+          <div class="grid-2" style="margin-top:16px;" id="vocabAttacks"></div>
+        </div>
+      </div>
+
+      <div class="parallax-strip" data-parallax="0.12" style="margin-top:26px; border-left:4px solid var(--accent-primary);">
+        <div class="strip-pad">
+          <h3><i class="fa-solid fa-lock"></i> B. PROTECTION</h3>
+          <div class="grid-2" style="margin-top:16px;" id="vocabProtection"></div>
+        </div>
+      </div>
+
+      <div class="parallax-strip" data-parallax="0.12" style="margin-top:26px; border-left:4px solid var(--accent-secondary);">
+        <div class="strip-pad">
+          <h3><i class="fa-solid fa-network-wired"></i> C. NETWORKS</h3>
+          <div class="grid-2" style="margin-top:16px;" id="vocabNetworks"></div>
+        </div>
+      </div>
+
+      <div class="parallax-strip" data-parallax="0.14" style="margin-top:26px;">
+        <div class="strip-pad">
+          <h3>Vocabulary Exercises</h3>
+          <p class="muted">Each exercise includes an answer key at the end.</p>
+
+          <div class="card" style="margin-top:14px;">
+            <h4>Exercise 1: Listening comprehension</h4>
+            <p class="muted">
+              Listen and choose the correct technical term. Use the speaker buttons in each sentence.
+            </p>
+            <form id="quizVocabListen"></form>
+            <button class="btn" type="button" onclick="gradeQuiz('quizVocabListen')">Check Exercise 1</button>
+            <div id="res-quizVocabListen" style="margin-top:12px; font-weight:900;"></div>
+
+            <div class="answer-key">
+              <h4>Answer Key (Exercise 1)</h4>
+              <ol id="keyList-quizVocabListen"></ol>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:16px;">
+            <h4>Exercise 2: Writing (term from definition)</h4>
+            <p class="muted">Type the correct English term.</p>
+            <form id="vocabWritingForm">
+              <div class="quiz-question">
+                <h5>5. Attack that tries all possible password combinations until it succeeds:</h5>
+                <input type="text" name="w5" placeholder="Type the term..." />
+              </div>
+              <div class="quiz-question">
+                <h5>6. Process of converting ciphertext back to readable plaintext using the correct key:</h5>
+                <input type="text" name="w6" placeholder="Type the term..." />
+              </div>
+              <div class="quiz-question">
+                <h5>7. Software update designed specifically to fix a vulnerability:</h5>
+                <input type="text" name="w7" placeholder="Type the term..." />
+              </div>
+              <div class="quiz-question">
+                <h5>8. Network device that connects devices in a LAN using MAC addresses:</h5>
+                <input type="text" name="w8" placeholder="Type the term..." />
+              </div>
+              <button class="btn" type="button" onclick="gradeVocabWriting()">Check Exercise 2</button>
+              <div id="res-vocabWriting" style="margin-top:12px; font-weight:900;"></div>
+
+              <div class="answer-key">
+                <h4>Answer Key (Exercise 2)</h4>
+                <ol style="margin-left:20px; color:var(--text-muted); line-height:1.9;">
+                  <li><strong>Q5:</strong> brute force attack</li>
+                  <li><strong>Q6:</strong> decryption</li>
+                  <li><strong>Q7:</strong> security patch</li>
+                  <li><strong>Q8:</strong> switch</li>
+                </ol>
+              </div>
+            </form>
+          </div>
+
+          <div class="card" style="margin-top:16px;">
+            <h4>Exercise 3: Multiple choice (real context)</h4>
+            <form id="quizVocabMC"></form>
+            <button class="btn" type="button" onclick="gradeQuiz('quizVocabMC')">Check Exercise 3</button>
+            <div id="res-quizVocabMC" style="margin-top:12px; font-weight:900;"></div>
+
+            <div class="answer-key">
+              <h4>Answer Key (Exercise 3)</h4>
+              <ol id="keyList-quizVocabMC"></ol>
+            </div>
+          </div>
+
+          <div class="answer-key" style="margin-top:16px;">
+            <h4>Answer Key + Technical Explanations (All Vocabulary Exercises)</h4>
+            <div class="table-wrap" id="vocabSolutionsTable"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 5: TECHNICAL READING -->
+    <section id="reading" class="page-section">
+      <h1 class="fade-in" style="font-size:48px;"><i class="fa-solid fa-book"></i> Technical Reading (Cybersecurity)</h1>
+
+      <div class="parallax-strip" data-parallax="0.12" style="margin-top:18px;">
+        <div class="strip-pad">
+          <div class="card card-blue">
+            <h4 style="border-bottom:1px solid rgba(0,191,255,.45); padding-bottom:10px; margin-bottom:12px;">
+              Reading 1: What is cybersecurity?
+            </h4>
+            <p class="muted" style="font-size:12px; margin-bottom:10px;">Level: Intermediate • Words: ~230</p>
+            <div style="color:var(--text-muted); line-height:1.85;">
+              <p>
+                Cybersecurity is the practice of protecting systems, networks, and programs from digital attacks. These attacks are usually aimed at accessing,
+                changing, or destroying sensitive information; extorting money from users; or interrupting normal business operations.
+              </p>
+              <p style="margin-top:10px;">
+                Implementing effective cybersecurity measures is challenging because there are more connected devices than ever before, and attackers keep becoming more innovative.
+                A successful approach often uses <strong>defense-in-depth</strong>: multiple security layers so that if one control fails, others still protect the asset.
+              </p>
+              <p style="margin-top:10px;">
+                In an organization, people, processes, and technology must complement one another. Key threats include malware, ransomware, phishing,
+                social engineering, and advanced persistent threats (APTs). Understanding these threats is the first step toward a resilient security posture.
+              </p>
+            </div>
+
+            <details style="margin-top:14px; background:#000; padding:12px; border:1px solid rgba(0,255,0,.35); border-radius:6px;">
+              <summary style="cursor:pointer; color:var(--accent-primary); font-weight:900;">Glossary (click to expand)</summary>
+              <ul style="margin-top:10px; margin-left:18px;">
+                <li><strong>practice</strong> /ˈpræktɪs/ <button class="speak-btn speak-inline" type="button" onclick="speakText('practice')"><i class="fa-solid fa-volume-up"></i></button></li>
+                <li><strong>protecting</strong> /prəˈtɛktɪŋ/ <button class="speak-btn speak-inline" type="button" onclick="speakText('protecting')"><i class="fa-solid fa-volume-up"></i></button></li>
+                <li><strong>sensitive</strong> /ˈsɛnsɪtɪv/ <button class="speak-btn speak-inline" type="button" onclick="speakText('sensitive')"><i class="fa-solid fa-volume-up"></i></button></li>
+                <li><strong>extorting</strong> /ɪkˈstɔrtɪŋ/ <button class="speak-btn speak-inline" type="button" onclick="speakText('extorting')"><i class="fa-solid fa-volume-up"></i></button></li>
+                <li><strong>innovative</strong> /ˈɪnəˌveɪtɪv/ <button class="speak-btn speak-inline" type="button" onclick="speakText('innovative')"><i class="fa-solid fa-volume-up"></i></button></li>
+                <li><strong>resilient</strong> /rɪˈzɪliənt/ <button class="speak-btn speak-inline" type="button" onclick="speakText('resilient')"><i class="fa-solid fa-volume-up"></i></button></li>
+                <li><strong>posture</strong> /ˈpɑstʃɚ/ <button class="speak-btn speak-inline" type="button" onclick="speakText('posture')"><i class="fa-solid fa-volume-up"></i></button></li>
+                <li><strong>defense-in-depth</strong> /dɪˈfɛns ɪn dɛpθ/ <button class="speak-btn speak-inline" type="button" onclick="speakText('defense in depth')"><i class="fa-solid fa-volume-up"></i></button></li>
+              </ul>
+            </details>
+          </div>
+
+          <div class="card" style="margin-top:14px;">
+            <h3>Reading 1 Quiz (5 questions)</h3>
+            <p class="muted">Answer key is shown below.</p>
+            <form id="quizReading1"></form>
+            <button class="btn" type="button" onclick="gradeQuiz('quizReading1')">Submit Reading 1 Quiz</button>
+            <div id="res-quizReading1" style="margin-top:12px; font-weight:900;"></div>
+            <div class="answer-key">
+              <h4>Answer Key (Reading 1)</h4>
+              <ol id="keyList-quizReading1"></ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="parallax-strip" data-parallax="0.12" style="margin-top:26px;">
+        <div class="strip-pad">
+          <div class="card" style="border-color:rgba(0,255,0,.6)">
+            <h4 style="border-bottom:1px solid rgba(0,255,0,.35); padding-bottom:10px; margin-bottom:12px; color:var(--accent-primary);">
+              Reading 2: How encryption works
+            </h4>
+            <p class="muted" style="font-size:12px; margin-bottom:10px;">Level: Upper-intermediate • Words: ~210</p>
+            <div style="color:var(--text-muted); line-height:1.85;">
+              <p>
+                Encryption is the process of converting readable data, known as plaintext, into an encoded format called ciphertext.
+                This transformation is done using an algorithm and an encryption key.
+              </p>
+              <p style="margin-top:10px;">
+                There are two main types of encryption: symmetric and asymmetric. In symmetric encryption, the same key is used to encrypt and decrypt data.
+                This method is fast but requires a secure way to share the secret key.
+              </p>
+              <p style="margin-top:10px;">
+                Asymmetric encryption (public-key cryptography) uses two related keys: a public key for encryption and a private key for decryption.
+                When you browse the web using HTTPS, TLS helps establish an encrypted connection with the server to protect your data from interception.
+              </p>
+            </div>
+
+            <details style="margin-top:14px; background:#000; padding:12px; border:1px solid rgba(0,255,0,.35); border-radius:6px;">
+              <summary style="cursor:pointer; color:var(--accent-primary); font-weight:900;">Glossary (click to expand)</summary>
+              <ul style="margin-top:10px; margin-left:18px;">
+                <li><strong>plaintext</strong> /ˈpleɪnˌtɛkst/ <button class="speak-btn speak-inline" type="button" onclick="speakText('plaintext')"><i class="fa-solid fa-volume-up"></i></button></li>
+                <li><strong>ciphertext</strong> /ˈsaɪfɚˌtɛkst/ <button class="speak-btn speak-inline" type="button" onclick="speakText('ciphertext')"><i class="fa-solid fa-volume-up"></i></button></li>
+                <li><strong>algorithm</strong> /ˈælɡəˌrɪðəm/ <button class="speak-btn speak-inline" type="button" onclick="speakText('algorithm')"><i class="fa-solid fa-volume-up"></i></button></li>
+                <li><strong>symmetric</strong> /sɪˈmɛtrɪk/ <button class="speak-btn speak-inline" type="button" onclick="speakText('symmetric')"><i class="fa-solid fa-volume-up"></i></button></li>
+                <li><strong>asymmetric</strong> /ˌeɪsɪˈmɛtrɪk/ <button class="speak-btn speak-inline" type="button" onclick="speakText('asymmetric')"><i class="fa-solid fa-volume-up"></i></button></li>
+                <li><strong>interception</strong> /ˌɪntɚˈsɛpʃən/ <button class="speak-btn speak-inline" type="button" onclick="speakText('interception')"><i class="fa-solid fa-volume-up"></i></button></li>
+                <li><strong>establish</strong> /ɪˈstæblɪʃ/ <button class="speak-btn speak-inline" type="button" onclick="speakText('establish')"><i class="fa-solid fa-volume-up"></i></button></li>
+              </ul>
+            </details>
+          </div>
+
+          <div class="card" style="margin-top:14px;">
+            <h3>Reading 2 Quiz (5 questions)</h3>
+            <p class="muted">Answer key is shown below.</p>
+            <form id="quizReading2"></form>
+            <button class="btn" type="button" onclick="gradeQuiz('quizReading2')">Submit Reading 2 Quiz</button>
+            <div id="res-quizReading2" style="margin-top:12px; font-weight:900;"></div>
+            <div class="answer-key">
+              <h4>Answer Key (Reading 2)</h4>
+              <ol id="keyList-quizReading2"></ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 6: EXERCISES -->
+    <section id="practice" class="page-section">
+      <h1 class="fade-in" style="font-size:48px;"><i class="fa-solid fa-compass"></i> Exercises</h1>
+      <p class="muted">Interactive exercises to reinforce your learning. Answer keys appear at the end of each exercise set.</p>
+
+      <div class="parallax-strip" data-parallax="0.14" style="margin-top:18px;">
+        <div class="strip-pad">
+          <div class="card">
+            <h3><i class="fa-solid fa-headphones"></i> Exercise 1: Identify the correct sound</h3>
+            <p class="muted">Choose the correct IPA symbol for each item.</p>
+            <form id="quizPractice1"></form>
+            <button class="btn" type="button" onclick="gradeQuiz('quizPractice1')">Submit Exercise 1</button>
+            <div id="res-quizPractice1" style="margin-top:12px; font-weight:900;"></div>
+            <div class="answer-key">
+              <h4>Answer Key (Exercise 1)</h4>
+              <ol id="keyList-quizPractice1"></ol>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:14px;">
+            <h3><i class="fa-solid fa-pen-to-square"></i> Exercise 2: Vocabulary in context</h3>
+            <p class="muted">Word bank: <span class="kbd">ransomware</span> <span class="kbd">firewall</span> <span class="kbd">encryption</span> <span class="kbd">phishing</span> <span class="kbd">authentication</span></p>
+            <form id="practice2Form"></form>
+            <button class="btn" type="button" onclick="gradePractice2()">Submit Exercise 2</button>
+            <div id="res-practice2" style="margin-top:12px; font-weight:900;"></div>
+            <div class="answer-key" id="key-practice2">
+              <h4>Answer Key (Exercise 2)</h4>
+              <ol id="keyList-practice2"></ol>
+            </div>
+          </div>
+
+          <div class="card card-yellow" style="margin-top:14px;">
+            <h3 style="color:#FFD700;"><i class="fa-solid fa-magnifying-glass"></i> Exercise 3: Real case – The Corporate Attack</h3>
+            <p class="muted" style="margin-top:10px; background:#000; padding:14px; border-left:4px solid #FFD700; border-radius:6px;">
+              <strong>Scenario:</strong><br>
+              A company employee received an email claiming to be from the IT department asking to "verify" their login credentials on an external website.
+              After clicking the link and entering their username and password, the company's database was accessed and 10,000 customer records were stolen.
+              The attacker also installed software that encrypted all backups and demanded a payment of &#36;50,000 in Bitcoin.
+            </p>
+
+            <form id="quizPractice3"></form>
+            <button class="btn" type="button" style="background:#FFD700; color:#000;" onclick="gradeQuiz('quizPractice3')">
+              Submit Exercise 3 <i class="fa-solid fa-check"></i>
+            </button>
+            <div id="res-quizPractice3" style="margin-top:12px; font-weight:900;"></div>
+            <div class="answer-key">
+              <h4>Answer Key (Exercise 3)</h4>
+              <ol id="keyList-quizPractice3"></ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 7: FINAL TEST -->
+    <section id="evaluation" class="page-section">
+      <div class="parallax-strip" data-parallax="0.10" style="border:3px double var(--accent-primary);">
+        <div class="strip-pad" style="text-align:center; background:rgba(0,255,0,.05)">
+          <h1 class="fade-in" style="font-size:40px;"><i class="fa-solid fa-clipboard-check"></i> FINAL TEST – CyberEng</h1>
+          <h3 style="margin-top:8px;">Technical English for Cybersecurity</h3>
+          <p class="muted" style="margin-top:10px;">
+            Total: 30 questions • Minimum passing score: 60% (18/30)
+          </p>
+        </div>
+      </div>
+
+      <div style="margin-top:18px;" class="parallax-strip" data-parallax="0.12">
+        <div class="strip-pad">
+          <form id="quizFinal"></form>
+          <button class="btn" style="width:100%; font-size:20px;" type="button" onclick="gradeFinal()">
+            Submit Final Test <i class="fa-solid fa-shield"></i>
+          </button>
+          <div id="res-quizFinal" style="margin-top:16px; display:none; padding:16px; border-radius:6px;"></div>
+
+          <div class="answer-key" style="margin-top:16px;">
+            <h4>Answer Key (Final Test)</h4>
+            <ol id="keyList-quizFinal"></ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 8: AUTHOR -->
+    <section id="author" class="page-section">
+      <h1 class="fade-in" style="font-size:48px;"><i class="fa-solid fa-user-secret"></i> About the Author</h1>
+
+      <div class="grid-2" style="margin-top:18px;">
+        <div class="card" style="text-align:center;">
+          <div style="
+            width:150px;height:150px;border-radius:50%;
+            border:3px solid var(--accent-primary);
+            box-shadow:0 0 15px var(--accent-primary);
+            margin:0 auto 16px;
+            background:url('https://ui-avatars.com/api/?name=William+Jimenez&background=001122&color=00FF00&size=180') center/cover;">
+          </div>
+          <h2>WILLIAM JIMENEZ</h2>
+          <h4 style="margin-top:6px;">University Student (UTP) | Panama</h4>
+          <p class="muted" style="margin-top:10px; font-size:13px;">
+            Technological University of Panama (Universidad Tecnológica de Panamá)
+          </p>
+        </div>
+
+        <div class="card">
+          <p class="muted" style="font-style:italic;">
+            "I am a Panamanian cybersecurity student. I created CyberEng to help other students master the specialized English needed in today's digital world."
+          </p>
+
+          <h4 style="margin-top:16px; color:var(--accent-primary); font-family:var(--font-title);">Motivation</h4>
+          <p class="muted" style="font-size:14px;">
+            During my studies at UTP, I noticed many classmates struggled to read technical documentation, use security tools, and communicate in English.
+            CyberEng was created to solve that problem: a free resource designed for students who want practical, job-ready technical English.
+          </p>
+
+          <h4 style="margin-top:16px; color:var(--accent-primary); font-family:var(--font-title);">Areas of interest</h4>
+          <ul style="margin-left:18px; color:var(--text-muted); font-size:14px; line-height:1.8;">
+            <li>Offensive and defensive cybersecurity</li>
+            <li>Technical English and General American pronunciation</li>
+            <li>Latin American tech community</li>
+          </ul>
+        </div>
+      </div>
+
+      <h2 style="margin-top:26px; text-align:center;">Contact & Social Media</h2>
+      <div class="grid-4" style="margin-top:16px;">
+        <div class="card" style="text-align:center;">
+          <i class="fab fa-whatsapp" style="font-size:44px; color:#25D366; margin-bottom:10px;"></i>
+          <h4 style="font-family:var(--font-subtitle);">WHATSAPP</h4>
+          <p class="muted" style="font-size:12px; margin:10px 0;">+507 6368-0620<br>Message me if you have questions about the course.</p>
+          <a class="btn" style="background:#25D366; color:white; width:100%; font-size:12px;" target="_blank" rel="noopener" href="https://wa.me/50763680620">
+            Send message on WhatsApp <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+
+        <div class="card" style="text-align:center;">
+          <i class="fas fa-envelope" style="font-size:44px; color:#EA4335; margin-bottom:10px;"></i>
+          <h4 style="font-family:var(--font-subtitle);">EMAIL</h4>
+          <p class="muted" style="font-size:12px; margin:10px 0;">jimenez1william0@gmail.com<br>Suggestions, collaborations, academic questions.</p>
+          <a class="btn" style="background:#EA4335; color:white; width:100%; font-size:12px;" href="mailto:jimenez1william0@gmail.com">
+            Send email <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+
+        <div class="card" style="text-align:center;">
+          <i class="fab fa-instagram" style="font-size:44px; color:#E1306C; margin-bottom:10px;"></i>
+          <h4 style="font-family:var(--font-subtitle);">INSTAGRAM</h4>
+          <p class="muted" style="font-size:12px; margin:10px 0;">@jimenez_ads<br>Technology and learning content.</p>
+          <a class="btn" style="background:#E1306C; color:white; width:100%; font-size:12px;" target="_blank" rel="noopener" href="https://instagram.com/jimenez_ads">
+            Follow on Instagram <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+
+        <div class="card" style="text-align:center;">
+          <i class="fab fa-tiktok" style="font-size:44px; color:#FFFFFF; margin-bottom:10px;"></i>
+          <h4 style="font-family:var(--font-subtitle);">TIKTOK</h4>
+          <p class="muted" style="font-size:12px; margin:10px 0;">@adns_j<br>Short tech videos.</p>
+          <a class="btn" style="background:#FFFFFF; color:black; width:100%; font-size:12px;" target="_blank" rel="noopener" href="https://tiktok.com/@adns_j">
+            View TikTok <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 9: COMMENTS -->
+    <section id="comments" class="page-section">
+      <h1 class="fade-in" style="font-size:48px;"><i class="fa-solid fa-comments"></i> Comments and Reviews</h1>
+
+      <div class="grid-2" style="margin-top:18px;">
+        <div class="card">
+          <h3 style="color:var(--accent-primary); margin-bottom:12px;">Submit your review</h3>
+
+          <form id="reviewForm" onsubmit="submitReview(event)">
+            <div style="margin-bottom:12px;">
+              <label>Full name *</label>
+              <input type="text" name="fullName" required />
+            </div>
+
+            <div style="margin-bottom:12px;">
+              <label>Email (optional)</label>
+              <input type="email" name="email" />
+            </div>
+
+            <div style="margin-bottom:12px;">
+              <label>What do you study?</label>
+              <select name="major">
+                <option>Computer Science</option>
+                <option>Cybersecurity</option>
+                <option>Networks</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <div style="margin-bottom:12px;">
+              <label>How would you rate the course? *</label>
+              <div class="stars" aria-label="Star rating">
+                <button type="button" data-star="1" onclick="setStars(1)" aria-label="1 star">★</button>
+                <button type="button" data-star="2" onclick="setStars(2)" aria-label="2 stars">★</button>
+                <button type="button" data-star="3" onclick="setStars(3)" aria-label="3 stars">★</button>
+                <button type="button" data-star="4" onclick="setStars(4)" aria-label="4 stars">★</button>
+                <button type="button" data-star="5" onclick="setStars(5)" aria-label="5 stars">★</button>
+              </div>
+              <input type="hidden" name="rating" id="ratingVal" required />
+              <p class="muted" style="font-size:12px; margin-top:6px;">Required</p>
+            </div>
+
+            <div style="margin-bottom:12px;">
+              <label>Which module was most useful?</label>
+              <div class="muted" style="margin-top:8px; display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                <label><input type="checkbox" name="useful" value="Sound System"> Sound System</label>
+                <label><input type="checkbox" name="useful" value="Alphabet"> Alphabet</label>
+                <label><input type="checkbox" name="useful" value="Vocabulary"> Vocabulary</label>
+                <label><input type="checkbox" name="useful" value="Technical Reading"> Technical Reading</label>
+                <label><input type="checkbox" name="useful" value="Exercises"> Exercises</label>
+                <label><input type="checkbox" name="useful" value="All"> All</label>
+              </div>
+            </div>
+
+            <div style="margin-bottom:12px;">
+              <label>Your comment or suggestion (min 20 chars) *</label>
+              <textarea name="comment" minlength="20" required></textarea>
+            </div>
+
+            <div style="margin-bottom:12px;">
+              <label>Would you recommend this site?</label>
+              <div class="muted" style="margin-top:8px;">
+                <label style="display:block; margin:6px 0;"><input type="radio" name="recommend" value="Yes" required> Yes</label>
+                <label style="display:block; margin:6px 0;"><input type="radio" name="recommend" value="No"> No</label>
+                <label style="display:block; margin:6px 0;"><input type="radio" name="recommend" value="Maybe"> Maybe</label>
+              </div>
+            </div>
+
+            <button type="submit" class="btn" style="width:100%;">SEND REVIEW <i class="fa-solid fa-paper-plane"></i></button>
+          </form>
+
+          <div id="reviewSuccess" style="display:none; margin-top:14px; padding:14px; background:rgba(0,255,0,.10); border-left:4px solid var(--accent-primary); border-radius:6px;">
+            <strong>Thank you for your review!</strong><br>
+            Your feedback helps improve JW-CyberEng for Panamanian students.<br>
+            <span class="muted">– William Jimenez</span>
+          </div>
+        </div>
+
+        <div>
+          <h3 style="color:var(--accent-secondary); margin-bottom:12px;">Review Gallery</h3>
+          <div id="reviewGallery"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Global Footer -->
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <h4>About the Site</h4>
+        <p class="muted" style="font-size:14px;">
+          <strong>CyberEng – Learn Cybersecurity</strong><br>
+          Educational platform for Panamanian IT and cybersecurity students.<br>
+          © 2024 William Jimenez. Panama.
+        </p>
+      </div>
+
+      <div>
+        <h4>Quick Navigation</h4>
+        <ul style="list-style:none; font-size:14px; line-height:1.9;">
+          <li><a href="#" onclick="navigate('home', document.querySelector('nav a[data-page=&quot;home&quot;]')); return false;" style="color:var(--text-muted); text-decoration:none;">
+            <i class="fa-solid fa-house"></i> Home</a></li>
+          <li><a href="#" onclick="navigate('sounds', document.querySelector('nav a[data-page=&quot;sounds&quot;]')); return false;" style="color:var(--text-muted); text-decoration:none;">
+            <i class="fa-solid fa-wave-square"></i> Sound System</a></li>
+          <li><a href="#" onclick="navigate('vocabulary', document.querySelector('nav a[data-page=&quot;vocabulary&quot;]')); return false;" style="color:var(--text-muted); text-decoration:none;">
+            <i class="fa-solid fa-book"></i> Vocabulary</a></li>
+          <li><a href="#" onclick="navigate('evaluation', document.querySelector('nav a[data-page=&quot;evaluation&quot;]')); return false;" style="color:var(--text-muted); text-decoration:none;">
+            <i class="fa-solid fa-clipboard-check"></i> Final Test</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Contact & Social</h4>
+        <div class="social-icons" aria-label="Social links">
+          <a class="icon-wa" href="https://wa.me/50763680620" target="_blank" rel="noopener" aria-label="WhatsApp">
+            <i class="fab fa-whatsapp"></i>
+          </a>
+          <a class="icon-mail" href="mailto:jimenez1william0@gmail.com" aria-label="Email">
+            <i class="fas fa-envelope"></i>
+          </a>
+          <a class="icon-ig" href="https://instagram.com/jimenez_ads" target="_blank" rel="noopener" aria-label="Instagram">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a class="icon-tt" href="https://tiktok.com/@adns_j" target="_blank" rel="noopener" aria-label="TikTok">
+            <i class="fab fa-tiktok"></i>
+          </a>
+        </div>
+        <p class="muted" style="font-size:12px; margin-top:10px;">
+          +507 6368-0620<br>
+          jimenez1william0@gmail.com
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /***********************
+     * MATRIX BACKGROUND
+     ***********************/
+    const canvas = document.getElementById('matrixCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function fitCanvas(){
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    fitCanvas();
+
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$+-*/=%"\\\'#&_(),.;:?!\\\\|{}<>[]^~';
+    const fontSize = 14;
+    let columns = Math.floor(canvas.width / fontSize);
+    let drops = Array(columns).fill(1);
+
+    function drawMatrix(){
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#00FF00';
+      ctx.font = fontSize + 'px monospace';
+
+      for(let i=0; i<drops.length; i++){
+        const text = letters.charAt(Math.floor(Math.random() * letters.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+      }
+    }
+    setInterval(drawMatrix, 33);
+
+    window.addEventListener('resize', () => {
+      fitCanvas();
+      columns = Math.floor(canvas.width / fontSize);
+      drops = Array(columns).fill(1);
+    });
+
+    /***********************
+     * PARALLAX STRIPS
+     ***********************/
+    function parallaxUpdate(){
+      const strips = document.querySelectorAll('[data-parallax]');
+      const y = window.scrollY;
+      strips.forEach(el => {
+        const speed = parseFloat(el.getAttribute('data-parallax')) || 0.15;
+        el.style.backgroundPosition = `50% ${-(y * speed)}px`;
+      });
+    }
+    window.addEventListener('scroll', parallaxUpdate, {passive:true});
+    parallaxUpdate();
+
+    /***********************
+     * NAVIGATION + SEO (SPA)
+     ***********************/
+    const pageSEO = {
+      home: {
+        title: "CyberEng – Aprende Inglés Técnico de Ciberseguridad | Panamá",
+        description: "Aprende inglés técnico de ciberseguridad con pronunciación americana. Curso gratuito para estudiantes panameños de informática."
+      },
+      sounds: {
+        title: "Fonética Americana IPA – Sound System | CyberEng",
+        description: "Sistema de sonidos: vocales, diptongos y consonantes con IPA y audio (General American)."
+      },
+      alphabet: {
+        title: "Alfabeto Inglés Americano con IPA | CyberEng",
+        description: "Alfabeto americano con nombres, IPA, ejemplos técnicos y pronunciación con audio."
+      },
+      vocabulary: {
+        title: "Vocabulario Ciberseguridad en Inglés | CyberEng",
+        description: "Términos esenciales de ciberseguridad con IPA americana, ejemplos y audio de pronunciación."
+      },
+      reading: {
+        title: "Lectura Técnica en Inglés – Ciberseguridad | CyberEng",
+        description: "Lecturas técnicas de ciberseguridad con glosario y ejercicios de comprensión."
+      },
+      practice: {
+        title: "Ejercicios Interactivos Inglés Técnico | CyberEng",
+        description: "Prácticas interactivas: fonética, vocabulario en contexto y mini casos de seguridad."
+      },
+      evaluation: {
+        title: "Evaluación Final Inglés Ciberseguridad | CyberEng",
+        description: "Examen final de 30 preguntas con puntaje automático y recomendaciones personalizadas."
+      },
+      author: {
+        title: "Autor – William Jimenez | CyberEng Panamá",
+        description: "Perfil del autor y datos de contacto completos."
+      },
+      comments: {
+        title: "Reseñas y Comentarios | CyberEng",
+        description: "Deja tu calificación y sugerencias para mejorar el curso."
+      }
+    };
+
+    function setMeta(name, content){
+      const meta = document.querySelector(`meta[name="${name}"]`);
+      if(meta) meta.setAttribute('content', content);
+    }
+
+    function navigate(pageId, linkEl){
+      document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+      const sec = document.getElementById(pageId);
+      if(sec) sec.classList.add('active');
+
+      document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+      if(linkEl) linkEl.classList.add('active');
+
+      // close mobile menu
+      const navMenu = document.getElementById('navMenu');
+      if(navMenu.classList.contains('show')) navMenu.classList.remove('show');
+
+      // SEO update
+      const seo = pageSEO[pageId];
+      if(seo){
+        document.title = seo.title;
+        setMeta('description', seo.description);
+      }
+
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+
+    function toggleMenu(){
+      document.getElementById('navMenu').classList.toggle('show');
+    }
+    function scrollToEl(sel){
+      const el = document.querySelector(sel);
+      if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    }
+
+    /***********************
+     * SPEECH (AUDIO)
+     ***********************/
+    function pickVoice(preferLang = 'en-US'){
+      const voices = window.speechSynthesis?.getVoices?.() || [];
+      return (
+        voices.find(v => v.lang && v.lang.startsWith(preferLang)) ||
+        voices.find(v => v.lang && v.lang.startsWith('en')) ||
+        null
+      );
+    }
+
+    function speakText(text, opts = {}){
+      if(!('speechSynthesis' in window)) {
+        alert("Sorry, your browser doesn't support Text-to-Speech.");
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = opts.lang || 'en-US';
+      u.rate = opts.rate ?? 0.92;
+      u.pitch = opts.pitch ?? 1.0;
+      u.voice = pickVoice('en-US') || null;
+      window.speechSynthesis.speak(u);
+    }
+
+    // IPA "audio": speak a short sample phrase for each symbol
+    const ipaSamples = {
+      // Vowels (monophthongs)
+      "/iː/":"ee as in see",
+      "/ɪ/":"ih as in sit",
+      "/æ/":"a as in cat",
+      "/ʌ/":"uh as in cup",
+      "/ə/":"uh as in about",
+      "/ɝ/":"er as in her",
+      "/ɚ/":"er as in better",
+      "/uː/":"oo as in food",
+      "/ʊ/":"oo as in book",
+      "/ɔː/":"aw as in law",
+      "/ɑː/":"ah as in father",
+      "/ɛ/":"eh as in bed",
+
+      // Diphthongs
+      "/oʊ/":"oh as in go",
+      "/aɪ/":"eye as in time",
+      "/aʊ/":"ow as in house",
+      "/eɪ/":"ay as in day",
+      "/ɔɪ/":"oy as in boy",
+
+      // Consonants
+      "/b/":"b as in bandwidth",
+      "/d/":"d as in data",
+      "/g/":"g as in gateway",
+      "/v/":"v as in vulnerability",
+      "/ð/":"th as in this",
+      "/z/":"z as in zero day",
+      "/dʒ/":"j as in Java",
+      "/m/":"m as in malware",
+      "/n/":"n as in network",
+      "/ŋ/":"ng as in singing",
+      "/r/":"r as in router",
+      "/w/":"w as in wireless",
+
+      "/p/":"p as in patch",
+      "/t/":"t as in tool",
+      "/k/":"k as in key",
+      "/f/":"f as in firewall",
+      "/θ/":"th as in threat",
+      "/s/":"s as in system",
+      "/ʃ/":"sh as in shell",
+      "/tʃ/":"ch as in switch",
+      "/h/":"h as in hacker",
+
+      // Letter-name IPA (Alphabet)
+      "/biː/":"bee",
+      "/siː/":"see",
+      "/diː/":"dee",
+      "/dʒiː/":"jee",
+      "/dʒeɪ/":"jay",
+      "/tiː/":"tee",
+      "/piː/":"pee",
+      "/viː/":"vee",
+      "/ziː/":"zee",
+      "/juː/":"you",
+      "/kjuː/":"cue",
+      "/ɛf/":"ef",
+      "/ɛl/":"el",
+      "/ɛm/":"em",
+      "/ɛn/":"en",
+      "/ɛs/":"ess",
+      "/ɛks/":"ex",
+      "/eɪtʃ/":"aitch",
+      "/keɪ/":"kay",
+      "/ɑːr/":"ar",
+      "/ˈdʌbəl juː/":"double u"
+    };
+
+    function speakIPA(symbol){
+      const sample = ipaSamples[symbol] || symbol.replaceAll("/","");
+      speakText(sample);
+    }
+
+    /***********************
+     * DATA + RENDERERS
+     ***********************/
+    const alphabetRows = [
+      ["A","ay","/eɪ/","access","Not like Spanish 'a' (more open)"],
+      ["B","bee","/biː/","bit, boot","OK"],
+      ["C","see","/siː/","cyber, code","Can sound /k/ or /s/"],
+      ["D","dee","/diː/","data, DDoS","OK"],
+      ["E","ee","/iː/","encryption","Not like Spanish 'e' (more tense)"],
+      ["F","ef","/ɛf/","firewall, file","OK"],
+      ["G","jee","/dʒiː/","gateway","G is /dʒ/ as in 'jee', not Spanish /g/"],
+      ["H","aitch","/eɪtʃ/","hacker, hash","Do not say 'hache'. English name is 'aitch'"],
+      ["I","eye","/aɪ/","IP, injection","A diphthong /aɪ/, not Spanish 'i'"],
+      ["J","jay","/dʒeɪ/","Java, JSON","CRITICAL: J is /dʒ/ as in 'jay', not Spanish /x/ or /h/"],
+      ["K","kay","/keɪ/","key, Kali","OK"],
+      ["L","el","/ɛl/","Linux, lateral movement","OK"],
+      ["M","em","/ɛm/","malware, MAC","OK"],
+      ["N","en","/ɛn/","network, node","OK"],
+      ["O","oh","/oʊ/","OWASP, open","It's a diphthong /oʊ/"],
+      ["P","pee","/piː/","patch, protocol","OK"],
+      ["Q","cue","/kjuː/","query, QR","/kjuː/ (not 'ku')"],
+      ["R","ar","/ɑːr/","router, root","No trill. Retroflex."],
+      ["S","ess","/ɛs/","server, SQL","OK"],
+      ["T","tee","/tiː/","threat, tool","OK"],
+      ["U","you","/juː/","URL, UDP","Sounds like 'you'"],
+      ["V","vee","/viː/","VPN, virus","Labiodental, not bilabial like /b/"],
+      ["W","double-u","/ˈdʌbəl juː/","WPA, wireless","Not 'doble uve'. It's 'double-u'."],
+      ["X","ex","/ɛks/","XML, XSS","OK"],
+      ["Y","why","/waɪ/","YAML","It's /waɪ/, not Spanish 'i griega'"],
+      ["Z","zee","/ziː/","zero-day, ZIP","American 'zee', not British 'zed'"]
+    ];
+
+    const alphabetErrorCards = [
+      {
+        title:'Error 1 – Letter "J"',
+        bad:"Pronouncing it like Spanish /x/ (a strong H sound).",
+        good:"In English, J = /dʒeɪ/ “jay” (jump, Java, JSON).",
+        tech:"Example: “JSON” spelled: jay-ess-oh-en."
+      },
+      {
+        title:'Error 2 – Letter "R"',
+        bad:"Using a Spanish trill.",
+        good:"American R is retroflex and never trills.",
+        tech:"Example: “router” spelled: ar-oh-you-tee-ee-ar."
+      },
+      {
+        title:'Error 3 – Letter "W"',
+        bad:"Saying “double V” or Spanish-style letter names.",
+        good:"In English, W = “double-u” /ˈdʌbəl juː/.",
+        tech:"Example: “WPA” = double-u pee ay."
+      },
+      {
+        title:'Error 4 – Letter "H"',
+        bad:"Saying “hache”.",
+        good:"In English, H = “aitch” /eɪtʃ/.",
+        tech:"Example: “HTTP” = aitch-tee-tee-pee."
+      },
+      {
+        title:'Error 5 – Letter "Z"',
+        bad:"Using British “zed” by default.",
+        good:"In American English, Z = “zee” /ziː/.",
+        tech:"In tech contexts, American usage is very common."
+      }
+    ];
+
+    const monophthongs = [
+      {ipa:"/iː/", name:"Long I (“ee” sound)", articulation:"High-front tongue, mouth almost closed (smile). Long, tense.", general:"see /siː/", tech:'key – "Never share your private key."', error:"Do not shorten. /iː/ ≠ /ɪ/ (seat ≠ sit)."},
+      {ipa:"/ɪ/", name:"Short I (“ih” sound)", articulation:"Slightly high-front tongue, more open than /iː/. Short, relaxed.", general:"sit /sɪt/", tech:'bit – "A bit is the smallest unit of data."', error:"Do not lengthen. /ɪ/ ≠ /iː/ (bit ≠ beat)."},
+      {ipa:"/æ/", name:"Short A (ash)", articulation:"Mouth wide open, low-front tongue. More open than Spanish vowels.", general:"cat /kæt/", tech:'malware – "The malware infected the system."', error:"Do not use a Spanish 'a'. Open the mouth more."},
+      {ipa:"/ʌ/", name:"Wedge vowel (“uh”)", articulation:"Central-low tongue, semi-open mouth. Neutral, short.", general:"cup /kʌp/", tech:'bug – "There is a critical bug in the code."', error:"Do not pronounce like Spanish 'o'. bug ≠ bog."},
+      {ipa:"/ə/", name:"Schwa (neutral)", articulation:"Most common English sound. Fully relaxed tongue. Unstressed syllables.", general:"about /əˈbaʊt/", tech:"authentication – 'Enable strong authentication.'", error:"Unstressed syllables reduce to /ə/. Do not stress every syllable."},
+      {ipa:"/ɝ/", name:"R-colored vowel (stressed)", articulation:"Tongue curls back (retroflex) without touching. American-only feel.", general:"her /hɝ/", tech:'server – "The server crashed unexpectedly."', error:"Do not trill the R."},
+      {ipa:"/ɚ/", name:"Schwa-R (unstressed)", articulation:"Like /ɝ/ but reduced and shorter in unstressed syllables.", general:"better /ˈbɛtɚ/", tech:'router – "Configure the router settings."', error:"Do not trill the final R."},
+      {ipa:"/uː/", name:"Long U (“oo” as in boot)", articulation:"Rounded lips, high-back tongue. Long and tense.", general:"food /fuːd/", tech:'tool – "This security tool is essential."', error:"Do not relax it into /ʊ/."},
+      {ipa:"/ʊ/", name:"Short U (“oo” as in foot)", articulation:"Slight rounding, high-back but relaxed. More open than /uː/.", general:"book /bʊk/", tech:'root – "Avoid daily root access."', error:"/ʊ/ ≠ /uː/ (book ≠ boot)."},
+      {ipa:"/ɔː/", name:"Open O (“aw”)", articulation:"Rounded and open lips, low-back tongue.", general:"law /lɔː/", tech:'port – "Close unused ports on the server."', error:"Do not flatten it into a pure Spanish 'o'."},
+      {ipa:"/ɑː/", name:"Open A (“ah”)", articulation:"Low-back tongue, very open mouth (“ahh”).", general:"father /ˈfɑːðɚ/", tech:'log – "Review the logs daily."', error:"Keep it open; avoid a narrow Spanish 'a'."},
+      {ipa:"/ɛ/", name:"Short E (“eh”)", articulation:"Mid-front tongue, semi-open mouth.", general:"bed /bɛd/", tech:'network – "The network is encrypted."', error:"Avoid turning it into /eɪ/."}
+    ];
+
+    const diphthongs = [
+      {ipa:"/oʊ/", name:"Go sound", move:"/o/ → /ʊ/", general:"go, home", tech:'code /koʊd/ – "Write secure code."', error:"Do not use a pure Spanish 'o'."},
+      {ipa:"/aɪ/", name:"Time sound", move:"/a/ → /ɪ/", general:"time, my", tech:'firewall /ˈfaɪɚˌwɔːl/ – "Enable the firewall immediately."', error:"Make the full glide."},
+      {ipa:"/aʊ/", name:"House sound", move:"/a/ → /ʊ/", general:"house, now", tech:'cloud /klaʊd/ – "Cloud computing is scalable."', error:"Round lips slightly at the end."},
+      {ipa:"/eɪ/", name:"Name sound", move:"/e/ → /ɪ/", general:"name, day", tech:'data /ˈdeɪtə/ – "Encrypt all sensitive data."', error:"Do not say a flat Spanish 'e'."},
+      {ipa:"/ɔɪ/", name:"Boy sound", move:"/ɔ/ → /ɪ/", general:"boy, coin", tech:'exploit /ˈɛkˌsplɔɪt/ – "Run the exploit carefully."', error:"Do not break into two syllables."}
+    ];
+
+    const voicedCons = [
+      {ipa:"/b/", name:"Bilabial", art:"Lips together, voiced.", tech:"bandwidth", err:"OK in Spanish"},
+      {ipa:"/d/", name:"Dental-alveolar", art:"Tongue to alveolar ridge, voiced.", tech:"data", err:"OK"},
+      {ipa:"/g/", name:"Velar", art:"Back of tongue to soft palate, voiced.", tech:"gateway", err:"OK"},
+      {ipa:"/v/", name:"Labiodental", art:"Top teeth + lower lip, voiced.", tech:"vulnerability", err:"Often confused with /b/"},
+      {ipa:"/ð/", name:"Dental", art:"Tongue between teeth, voiced.", tech:"this", err:"Often pronounced like /d/"},
+      {ipa:"/z/", name:"Alveolar", art:"Like /s/ but voiced.", tech:"zero-day", err:"Often pronounced like /s/"},
+      {ipa:"/dʒ/", name:"Affricate", art:"Stop + fricative, voiced.", tech:"injection", err:"Often replaced with Spanish /ʝ/ or /x/"},
+      {ipa:"/m/", name:"Bilabial nasal", art:"Lips closed, nasal, voiced.", tech:"malware", err:"OK"},
+      {ipa:"/n/", name:"Alveolar nasal", art:"Tongue to alveolar ridge, nasal, voiced.", tech:"network", err:"OK"},
+      {ipa:"/ŋ/", name:"Velar nasal", art:"Back nasal sound, voiced.", tech:"phishing", err:"Do not add /g/ at the end"},
+      {ipa:"/r/", name:"Retroflex", art:"Tongue curls back, no trill.", tech:"router", err:"Never trill"},
+      {ipa:"/w/", name:"Labiovelar", art:"Rounded lips + back tongue movement.", tech:"wireless", err:"OK"}
+    ];
+
+    const unvoicedCons = [
+      {ipa:"/p/", name:"Bilabial", art:"Lips together, unvoiced.", tech:"patch", err:"OK"},
+      {ipa:"/t/", name:"Alveolar", art:"Tongue to alveolar ridge, unvoiced.", tech:"tool", err:"OK"},
+      {ipa:"/k/", name:"Velar", art:"Back of tongue to soft palate, unvoiced.", tech:"key", err:"OK"},
+      {ipa:"/f/", name:"Labiodental", art:"Top teeth + lower lip, unvoiced.", tech:"firewall", err:"OK"},
+      {ipa:"/θ/", name:"Dental", art:"Tongue between teeth, unvoiced.", tech:"threat", err:"Often becomes /t/ or /s/"},
+      {ipa:"/s/", name:"Alveolar", art:"Fricative, unvoiced.", tech:"system", err:"OK"},
+      {ipa:"/ʃ/", name:"Post-alveolar", art:"“sh” sound, unvoiced.", tech:"shell", err:"Not in Spanish"},
+      {ipa:"/tʃ/", name:"Affricate", art:"“ch” sound, unvoiced.", tech:"architecture", err:"Close to Spanish 'ch'"},
+      {ipa:"/h/", name:"Glottal", art:"Pure air, unvoiced.", tech:"hacker", err:"Do not use Spanish 'j'"}
+    ];
+
+    const soundErrorCards = [
+      {title:"/v/ vs /b/", text:"English distinguishes /v/ (labiodental) from /b/ (bilabial). In Spanish they can feel similar; in English they are different.", example:"vulnerability"},
+      {title:"/θ/ and /ð/ (“th”)", text:"In 'threat' /θrɛt/, put the tongue lightly between the teeth. /θ/ is unvoiced; /ð/ is voiced (as in 'the').", example:"threat"},
+      {title:"Retroflex /r/", text:"In 'router' /ˈraʊtɚ/, the American R never trills. Curl the tongue slightly back.", example:"router"},
+      {title:"Final /ŋ/", text:"In 'phishing' /ˈfɪʃɪŋ/, do not add /g/ at the end. It ends with nasal /ŋ/.", example:"phishing"},
+      {title:"Glottal /h/", text:"In 'hacker' /ˈhækɚ/, /h/ is soft air. Do not replace it with a strong Spanish 'j'.", example:"hacker"},
+      {title:"Schwa /ə/", text:"Unstressed syllables reduce. In 'authentication' several syllables become very light. Do not stress every vowel.", example:"authentication"}
+    ];
+
+    const vocab = {
+      attacks: [
+        {term:"PHISHING", ipa:"/ˈfɪʃɪŋ/", hint:"FI-shing",
+          def:"Cyberattack sending fraudulent messages to trick users into revealing sensitive information.",
+          esDef:"Ataque de ingeniería social donde el atacante envía correos o mensajes falsos para robar credenciales o información.",
+          example:"The employee fell victim to a phishing attack and provided login credentials.",
+          detail:"Stress on the first syllable /ˈfɪ/. Final -ing ends with /ŋ/ (no /g/).",
+          common:"Do not say “fiss-ing”. 'ph' = /f/ and 'sh' = /ʃ/."},
+        {term:"RANSOMWARE", ipa:"/ˈrænsəmˌwɛr/", hint:"RAN-sum-wair",
+          def:"Malicious software that encrypts files and demands payment for decryption.",
+          esDef:"Software malicioso que cifra los archivos de la víctima y exige un rescate (a menudo en criptomonedas).",
+          example:"The hospital was hit by ransomware and patient records were encrypted.",
+          detail:"/ræ/ uses /æ/ (open). Middle /səm/ often has schwa.",
+          common:"Keep the stress on RAN."},
+        {term:"MALWARE", ipa:"/ˈmælˌwɛr/", hint:"MAL-wair",
+          def:"Any software intentionally designed to harm computers, servers, or networks.",
+          esDef:"Término paraguas para software malicioso: virus, troyanos, spyware, ransomware, etc.",
+          example:"Antivirus software detected malware in the downloaded file.",
+          detail:"/mæl/ uses /æ/ like 'cat'.",
+          common:"Do not pronounce a flat Spanish 'a'."},
+        {term:"BRUTE FORCE ATTACK", ipa:"/bruːt fɔːrs əˈtæk/", hint:"broot force uh-TAK",
+          def:"An attack that tries many password combinations until one works.",
+          esDef:"Ataque de fuerza bruta: prueba sistemática de combinaciones de contraseñas hasta acertar.",
+          example:"The account was compromised after a brute force attack.",
+          detail:"/bruːt/ has long /uː/. Final /əˈtæk/ has schwa then /æ/.",
+          common:"Do not stress every syllable equally."},
+        {term:"SQL INJECTION", ipa:"/ɛs kjuː ɛl ɪnˈdʒɛkʃən/", hint:"ess-cue-el in-JEK-shun",
+          def:"Inserting malicious SQL code into input fields to manipulate databases.",
+          esDef:"Inserción de código SQL malicioso en campos de entrada para manipular, robar o eliminar datos.",
+          example:"The application was vulnerable to SQL injection attacks.",
+          detail:"SQL is spelled out: “ess cue el”. '-tion' sounds like /ʃən/.",
+          common:"Avoid Spanish letter names when spelling acronyms."},
+        {term:"DDoS ATTACK", ipa:"/diː diː oʊ ɛs əˈtæk/", hint:"dee-dee-oh-ess",
+          def:"Overwhelming a service with traffic from many sources to make it unavailable.",
+          esDef:"Ataque distribuido de denegación de servicio: múltiples fuentes saturan un servicio hasta dejarlo inoperable.",
+          example:"The website went offline after a massive DDoS attack.",
+          detail:"Spell D-D-O-S in English letter names.",
+          common:"Avoid Spanish letter names."},
+        {term:"ZERO-DAY ATTACK", ipa:"/ˈzɪroʊ deɪ əˈtæk/", hint:"ZEE-roh day",
+          def:"Exploiting an unknown vulnerability, giving the vendor zero days to fix it.",
+          esDef:"Explota una vulnerabilidad desconocida para el fabricante; tiene “cero días” de aviso antes del ataque.",
+          example:"Researchers discovered a zero-day vulnerability in the browser.",
+          detail:"'zero' begins with /z/ voiced.",
+          common:"Do not say /s/ at the start."},
+        {term:"DATA BREACH", ipa:"/ˈdeɪtə briːtʃ/", hint:"DAY-tuh breech",
+          def:"A security incident where sensitive information is accessed or stolen without authorization.",
+          esDef:"Incidente de seguridad donde datos sensibles son accedidos, filtrados o robados sin autorización.",
+          example:"The company reported a data breach affecting millions of accounts.",
+          detail:"'data' often /ˈdeɪtə/. 'breach' has long /iː/ and ends with /tʃ/.",
+          common:"Do not confuse breach with bridge."}
+      ],
+      protection: [
+        {term:"FIREWALL", ipa:"/ˈfaɪɚˌwɔːl/", hint:"FYR-wawl",
+          def:"A system that monitors and controls network traffic based on rules.",
+          esDef:"Sistema (hardware o software) que filtra tráfico de red según reglas para permitir o bloquear conexiones.",
+          example:"Configure the firewall to block unauthorized inbound connections.",
+          detail:"'fire' starts with /aɪ/ diphthong.",
+          common:"Do not drop the /r/ sound."},
+        {term:"ENCRYPTION", ipa:"/ɪnˈkrɪpʃən/", hint:"in-CRIP-shun",
+          def:"Converting plaintext into ciphertext using an algorithm and key.",
+          esDef:"Proceso de cifrado: transforma datos legibles (texto plano) en texto cifrado usando un algoritmo y una clave.",
+          example:"Passwords are stored using strong encryption.",
+          detail:"Stress on CRIP. '-tion' = /ʃən/.",
+          common:"Do not say 'en-krip-SEE-on'."},
+        {term:"AUTHENTICATION", ipa:"/ɔˌθɛntɪˈkeɪʃən/", hint:"aw-then-tih-KAY-shun",
+          def:"Verifying identity before granting access.",
+          esDef:"Proceso de verificación de identidad (por ejemplo: contraseña, token, biometría) antes de permitir acceso.",
+          example:"Multi-factor authentication adds an extra security layer.",
+          detail:"'th' here is /θ/ (unvoiced). Stress on KAY.",
+          common:"Do not replace /θ/ with /t/."},
+        {term:"TWO-FACTOR AUTHENTICATION (2FA)", ipa:"/tuː ˈfæktɚ ɔˌθɛntɪˈkeɪʃən/", hint:"two FAK-ter",
+          def:"Identity verification requiring two different methods.",
+          esDef:"Autenticación de dos factores: requiere dos métodos distintos (algo que sabes + algo que tienes/eres).",
+          example:"Enable 2FA on all administrative accounts.",
+          detail:"'two' uses /uː/.",
+          common:"Say 'two-factor authentication' clearly in meetings."},
+        {term:"DIGITAL CERTIFICATE", ipa:"/ˈdɪdʒɪtl sɚˈtɪfɪkət/", hint:"DIJ-ih-tl ser-TIF-ih-kət",
+          def:"A document that helps verify the identity of a website or organization.",
+          esDef:"Documento electrónico que valida identidad digital y permite confianza en HTTPS/TLS.",
+          example:"The server's digital certificate has expired.",
+          detail:"Many reduced syllables (schwa).",
+          common:"Keep the stress on TIF."},
+        {term:"SECURITY PATCH", ipa:"/sɪˈkjʊrəti pætʃ/", hint:"sih-KYUR-ih-tee patch",
+          def:"A software update that fixes known vulnerabilities.",
+          esDef:"Actualización de software que corrige vulnerabilidades de seguridad conocidas.",
+          example:"Install the security patch immediately.",
+          detail:"'patch' ends with /tʃ/.",
+          common:"Do not say /pats/."},
+        {term:"ANTIVIRUS", ipa:"/ˈæntiˌvaɪrəs/", hint:"AN-tee-VY-rus",
+          def:"Software that detects, prevents, and removes malware.",
+          esDef:"Software que detecta, previene y elimina malware del sistema.",
+          example:"The antivirus flagged the file as a Trojan.",
+          detail:"Second part often has /aɪ/.",
+          common:"Open /æ/ in 'anti'."},
+        {term:"DECRYPTION", ipa:"/diˈkrɪpʃən/", hint:"dee-CRIP-shun",
+          def:"Converting ciphertext back into plaintext using the correct key.",
+          esDef:"Proceso inverso al cifrado: convierte texto cifrado en texto plano usando la clave correcta.",
+          example:"Decryption requires the correct key.",
+          detail:"Stress on CRIP. '-tion' = /ʃən/.",
+          common:"Avoid pronouncing every vowel strongly."}
+      ],
+      networks: [
+        {term:"ROUTER", ipa:"/ˈraʊtɚ/", hint:"ROW-ter",
+          def:"A device that forwards packets between networks.",
+          esDef:"Dispositivo que enruta paquetes de datos entre redes diferentes.",
+          example:"The router blocked traffic on port 23.",
+          detail:"American: /aʊ/ diphthong + schwa-r /ɚ/.",
+          common:"Do not say /ruː/."},
+        {term:"SERVER", ipa:"/ˈsɝvɚ/", hint:"SER-ver",
+          def:"A computer or program that provides services to other computers.",
+          esDef:"Sistema que ofrece servicios, recursos o datos a otros equipos (clientes) en una red.",
+          example:"The web server was compromised through an unpatched vulnerability.",
+          detail:"/ɝ/ is r-colored; no trill.",
+          common:"Do not roll the R."},
+        {term:"CLOUD COMPUTING", ipa:"/klaʊd kəmˈpjuːtɪŋ/", hint:"klowd kum-PYOO-ting",
+          def:"Delivering computing services over the internet.",
+          esDef:"Entrega de servicios informáticos (servidores, almacenamiento, etc.) por internet bajo demanda.",
+          example:"Cloud computing enables scalable security solutions.",
+          detail:"'cloud' has /aʊ/.",
+          common:"Do not flatten the diphthong."},
+        {term:"IP ADDRESS", ipa:"/aɪ piː əˈdrɛs/", hint:"eye-pee uh-DRESS",
+          def:"A numerical label that identifies a device on a network.",
+          esDef:"Etiqueta numérica que identifica un dispositivo en una red (IPv4/IPv6).",
+          example:"The attacker's IP address was traced to another country.",
+          detail:"IP is spelled: eye-pee.",
+          common:"Do not use Spanish letter names."},
+        {term:"DNS", ipa:"/diː ɛn ɛs/", hint:"dee-en-ess",
+          def:"System that translates domain names into IP addresses.",
+          esDef:"Sistema que traduce nombres de dominio (ej. example.com) a direcciones IP.",
+          example:"A DNS poisoning attack redirected users to a fake website.",
+          detail:"Spell D-N-S.",
+          common:"Avoid Spanish letter names."},
+        {term:"PROTOCOL", ipa:"/ˈproʊtəˌkɔl/", hint:"PROH-tuh-kawl",
+          def:"Rules that govern communication between devices.",
+          esDef:"Conjunto de reglas que rigen la comunicación de datos entre dispositivos de red.",
+          example:"HTTPS is a secure protocol for web communication.",
+          detail:"Starts with /oʊ/.",
+          common:"Do not say a flat 'o'."},
+        {term:"BANDWIDTH", ipa:"/ˈbændˌwɪdθ/", hint:"BAND-width",
+          def:"Maximum data capacity over a network in a given time.",
+          esDef:"Capacidad máxima de transmisión de datos en una red por unidad de tiempo (Mbps/Gbps).",
+          example:"The DDoS attack consumed all available bandwidth.",
+          detail:"Ends with /θ/ (“th”).",
+          common:"Do not replace /θ/ with /t/."},
+        {term:"SWITCH", ipa:"/swɪtʃ/", hint:"switch",
+          def:"A device that connects devices in a LAN using MAC addresses.",
+          esDef:"Dispositivo que conecta equipos en una LAN usando direcciones MAC para reenviar tráfico.",
+          example:"The switch failed, disconnecting all devices.",
+          detail:"Ends with /tʃ/.",
+          common:"Do not say /swits/."}
+      ]
+    };
+
+    /***********************
+     * QUIZ ENGINE
+     ***********************/
+    function renderQuiz(formId, questions){
+      const form = document.getElementById(formId);
+      form.innerHTML = "";
+
+      const keyList = document.getElementById(`keyList-${formId}`);
+      if(keyList) keyList.innerHTML = "";
+
+      questions.forEach((q, idx) => {
+        const qNum = idx + 1;
+        const wrapper = document.createElement('div');
+        wrapper.className = "quiz-question";
+
+        const title = document.createElement('h5');
+        title.innerHTML = q.prompt;
+        wrapper.appendChild(title);
+
+        const opts = document.createElement('div');
+        opts.className = "quiz-options";
+
+        q.options.forEach((opt, i) => {
+          const label = document.createElement('label');
+          label.innerHTML = `<input type="radio" name="${q.id}" value="${i}"> ${opt}`;
+          opts.appendChild(label);
+        });
+
+        wrapper.appendChild(opts);
+
+        const fb = document.createElement('div');
+        fb.className = "quiz-feedback";
+        fb.id = `fb-${q.id}`;
+        wrapper.appendChild(fb);
+
+        form.appendChild(wrapper);
+
+        if(keyList){
+          const li = document.createElement('li');
+          li.innerHTML = `<strong>Q${qNum}:</strong> ${q.keyText || q.options[q.correct]}${q.explain ? ` <span class="muted">— ${q.explain}</span>` : ""}`;
+          keyList.appendChild(li);
+        }
+      });
+
+      form.dataset.total = questions.length;
+      form.dataset.questions = JSON.stringify(questions.map(q => ({id:q.id, correct:q.correct, correctFb:q.correctFb, wrongFb:q.wrongFb})));
+    }
+
+    function gradeQuiz(formId){
+      const form = document.getElementById(formId);
+      const questions = JSON.parse(form.dataset.questions || "[]");
+      const total = parseInt(form.dataset.total || "0", 10);
+      const data = new FormData(form);
+
+      let score = 0;
+      questions.forEach(q => {
+        const selected = data.get(q.id);
+        const fb = document.getElementById(`fb-${q.id}`);
+        if(!fb) return;
+
+        fb.style.display = "block";
+        fb.className = "quiz-feedback";
+
+        if(selected !== null && parseInt(selected,10) === q.correct){
+          score++;
+          fb.textContent = q.correctFb || "Correct.";
+          fb.classList.add("feedback-correct");
+        } else {
+          fb.textContent = q.wrongFb || "Incorrect.";
+          fb.classList.add("feedback-incorrect");
+        }
+      });
+
+      const res = document.getElementById(`res-${formId}`);
+      if(res){
+        const pct = total ? (score/total)*100 : 0;
+        res.textContent = `Score: ${score}/${total} (${pct.toFixed(0)}%)`;
+        res.style.color = (pct >= 60) ? "var(--accent-primary)" : "var(--error-color)";
+      }
+
+      window.scrollTo({top: form.getBoundingClientRect().top + window.scrollY - 90, behavior:'smooth'});
+    }
+
+    /***********************
+     * SOUND QUIZ CUSTOM SCORING MESSAGE
+     ***********************/
+    function gradeSoundQuiz(){
+      gradeQuiz('quizSounds');
+      const res = document.getElementById('res-quizSounds');
+      const form = document.getElementById('quizSounds');
+      const total = parseInt(form.dataset.total || "0", 10);
+      const questions = JSON.parse(form.dataset.questions || "[]");
+      const data = new FormData(form);
+
+      let score = 0;
+      questions.forEach(q => {
+        const v = data.get(q.id);
+        if(v !== null && parseInt(v,10) === q.correct) score++;
+      });
+
+      const pct = total ? (score/total)*100 : 0;
+
+      let msg = "";
+      if(score === 15) msg = "Excellent. Move to the next module.";
+      else if(score >= 11) msg = "Very good. Review the sounds you missed.";
+      else if(score >= 8) msg = "Review consonants and the schwa.";
+      else msg = "Review the whole module (especially vowels and the American R).";
+
+      if(res){
+        res.textContent = `Score: ${score}/${total} (${pct.toFixed(0)}%) — ${msg}`;
+        res.style.color = (pct >= 70) ? "var(--accent-primary)" : "var(--error-color)";
+      }
+    }
+
+    /***********************
+     * VOCAB WRITING GRADER
+     ***********************/
+    function gradeVocabWriting(){
+      const form = document.getElementById('vocabWritingForm');
+      const data = new FormData(form);
+
+      const expected = {
+        w5: "brute force attack",
+        w6: "decryption",
+        w7: "security patch",
+        w8: "switch"
+      };
+
+      let score = 0;
+      const total = Object.keys(expected).length;
+
+      for(const k of Object.keys(expected)){
+        const got = (data.get(k) || "").toString().toLowerCase().trim();
+        if(got === expected[k]) score++;
+      }
+
+      const res = document.getElementById('res-vocabWriting');
+      const pct = (score/total)*100;
+      res.textContent = `Score: ${score}/${total} (${pct.toFixed(0)}%) — See the answer key below.`;
+      res.style.color = (pct >= 60) ? "var(--accent-primary)" : "var(--error-color)";
+    }
+
+    /***********************
+     * EXERCISE 2 GRADER
+     ***********************/
+    function gradePractice2(){
+      const form = document.getElementById('practice2Form');
+      const data = new FormData(form);
+
+      const expected = ["firewall","phishing","ransomware","encryption","authentication"];
+      let score = 0;
+
+      expected.forEach((ans, idx) => {
+        const got = (data.get(`p2q${idx+1}`) || "").toString().toLowerCase().trim();
+        if(got === ans) score++;
+      });
+
+      const res = document.getElementById('res-practice2');
+      const pct = (score/expected.length)*100;
+      res.textContent = `Score: ${score}/${expected.length} (${pct.toFixed(0)}%)`;
+      res.style.color = (pct >= 60) ? "var(--accent-primary)" : "var(--error-color)";
+    }
+
+    /***********************
+     * FINAL EXAM
+     ***********************/
+    const finalQuestions = [
+      // Section 1: Phonetics (10)
+      {section:"PHONETICS", id:"fq1", prompt:"1. What is the IPA symbol for the first vowel in <span class='kbd'>malware</span>?", options:["/eɪ/","/æ/","/ɑː/","/ə/"], correct:1},
+      {section:"PHONETICS", id:"fq2", prompt:"2. What sound does <span class='kbd'>th</span> produce in <span class='kbd'>authentication</span>?", options:["/θ/ (unvoiced)","/ð/ (voiced)","/t/","/s/"], correct:0},
+      {section:"PHONETICS", id:"fq3", prompt:"3. The <span class='kbd'>r</span> in <span class='kbd'>server</span> (American English) is:", options:["Retroflex and not trilled","Trilled like Spanish","Silent","Like a strong Spanish 'j'"], correct:0},
+      {section:"PHONETICS", id:"fq4", prompt:"4. How many syllables does <span class='kbd'>encryption</span> have?", options:["2","4","3 (en-CRIP-tion)","5"], correct:2},
+      {section:"PHONETICS", id:"fq5", prompt:"5. The schwa <span class='kbd'>/ə/</span> is:", options:["A reduced vowel in unstressed syllables","A consonant","A diphthong","A Spanish sound"], correct:0},
+      {section:"PHONETICS", id:"fq6", prompt:"6. The diphthong <span class='kbd'>/aɪ/</span> in <span class='kbd'>firewall</span> means:", options:["The vowel glides from open to closed","It is long and flat","It forms two separate syllables","It is the same as /iː/"], correct:0},
+      {section:"PHONETICS", id:"fq7", prompt:"7. Which is the correct IPA transcription for <span class='kbd'>cloud</span>?", options:["/klod/","/klaʊd/","/kluːd/","/kleɪd/"], correct:1},
+      {section:"PHONETICS", id:"fq8", prompt:"8. The consonant <span class='kbd'>/v/</span> in <span class='kbd'>VPN</span> is:", options:["Labiodental and voiced","The same as Spanish /b/","Bilabial and unvoiced","Dental"], correct:0},
+      {section:"PHONETICS", id:"fq9", prompt:"9. Which word contains the sound <span class='kbd'>/ʃ/</span>?", options:["server","phishing","threat","data"], correct:1},
+      {section:"PHONETICS", id:"fq10", prompt:"10. In <span class='kbd'>router</span> /ˈraʊtɚ/, the final “-er” is:", options:["Spanish /er/","/ɚ/ (schwa-r)","/ɛr/","Silent"], correct:1},
+
+      // Section 2: Vocabulary (10)
+      {section:"VOCABULARY", id:"fq11", prompt:"11. <span class='kbd'>Encryption</span> is:", options:["A cyberattack","The process of converting plaintext into ciphertext","A password","A virus"], correct:1},
+      {section:"VOCABULARY", id:"fq12", prompt:"12. What is a <span class='kbd'>data breach</span>?", options:["Unauthorized access or leak of sensitive data","A protocol","An analysis tool","A security update"], correct:0},
+      {section:"VOCABULARY", id:"fq13", prompt:"13. <span class='kbd'>Authentication</span> refers to:", options:["Encrypting data","Verifying identity","Detecting viruses","Transmitting data"], correct:1},
+      {section:"VOCABULARY", id:"fq14", prompt:"14. A <span class='kbd'>zero-day attack</span> exploits:", options:["An unknown vulnerability","Weak passwords","Networks without a firewall","Spam emails"], correct:0},
+      {section:"VOCABULARY", id:"fq15", prompt:"15. A <span class='kbd'>firewall</span>:", options:["Monitors and controls network traffic","Encrypts data","Detects malware","Creates backups"], correct:0},
+      {section:"VOCABULARY", id:"fq16", prompt:"16. <span class='kbd'>Bandwidth</span> refers to:", options:["Screen width","Network data capacity","Server size","Number of users"], correct:1},
+      {section:"VOCABULARY", id:"fq17", prompt:"17. <span class='kbd'>DNS</span> (Domain Name System):", options:["Translates domains to IP addresses","Encrypts communications","Detects intrusions","Manages passwords"], correct:0},
+      {section:"VOCABULARY", id:"fq18", prompt:"18. <span class='kbd'>Two-factor authentication (2FA)</span> requires:", options:["Only a password","Two verification methods","Mandatory biometrics","An RSA 2048 key"], correct:1},
+      {section:"VOCABULARY", id:"fq19", prompt:"19. A <span class='kbd'>brute force</span> attack is:", options:["Email deception","Systematic password guessing","Drive-by download infection","Traffic overload"], correct:1},
+      {section:"VOCABULARY", id:"fq20", prompt:"20. <span class='kbd'>Phishing</span> is:", options:["Deception to steal credentials via fake messages","Spyware","An SQL attack","Denial of service"], correct:0},
+
+      // Section 3: Reading (10)
+      {section:"READING", id:"fq21", prompt:"21. The passage describes which strategy?", options:["Defense-in-depth","Zero trust","Penetration testing","Incident response"], correct:0},
+      {section:"READING", id:"fq22", prompt:"22. How many categories of controls are mentioned?", options:["2","3 (technical, administrative, physical)","4","5"], correct:1},
+      {section:"READING", id:"fq23", prompt:"23. Which is a technical control in the passage?", options:["Encryption","Training","Access cards","Audits"], correct:0},
+      {section:"READING", id:"fq24", prompt:"24. What is an administrative control?", options:["Firewall","Surveillance camera","Policies and training","IDS"], correct:2},
+      {section:"READING", id:"fq25", prompt:"25. “If one control fails, others still protect the asset” means:", options:["If one layer fails, the others protect","All fail together","Only one layer is needed","No protection is necessary"], correct:0},
+      {section:"READING", id:"fq26", prompt:"26. In security, an <span class='kbd'>asset</span> is:", options:["An attack","A resource to protect","A protocol","A firewall"], correct:1},
+      {section:"READING", id:"fq27", prompt:"27. “Surveillance cameras” are an example of:", options:["Technical control","Administrative control","Physical control","Digital control"], correct:2},
+      {section:"READING", id:"fq28", prompt:"28. The purpose of defense-in-depth is to:", options:["Ensure multiple layers protect the system","Use only one strong firewall","Reduce costs","Simplify the network"], correct:0},
+      {section:"READING", id:"fq29", prompt:"29. In this context, <span class='kbd'>IDS</span> likely means:", options:["Internet Data Service","Intrusion Detection System","Internal Defense Software","Identity Signature"], correct:1},
+      {section:"READING", id:"fq30", prompt:"30. In the passage, <span class='kbd'>deploying</span> means:", options:["Destroying","Buying","Implementing","Analyzing"], correct:2}
+    ];
+
+    function gradeFinal(){
+      const form = document.getElementById('quizFinal');
+      const data = new FormData(form);
+      let score = 0;
+
+      finalQuestions.forEach(q => {
+        const v = data.get(q.id);
+        if(v !== null && parseInt(v,10) === q.correct) score++;
+      });
+
+      const pct = (score / finalQuestions.length) * 100;
+      const box = document.getElementById('res-quizFinal');
+
+      let msg = "";
+      if(score >= 27) msg = "ADVANCED: Excellent mastery.";
+      else if(score >= 22) msg = "HIGH INTERMEDIATE: Strong level. Keep reading technical texts in English.";
+      else if(score >= 18) msg = "INTERMEDIATE: Good progress. Reinforce phonetics and technical reading.";
+      else if(score >= 13) msg = "BASIC: Keep practicing. Review Sound System and Vocabulary.";
+      else msg = "NEEDS REINFORCEMENT: Restart from Module 1. Learning is gradual—keep going.";
+
+      box.style.display = "block";
+      box.style.background = (score >= 18) ? "rgba(0,255,0,.10)" : "rgba(255,68,68,.10)";
+      box.style.border = `2px solid ${(score >= 18) ? "var(--accent-primary)" : "var(--error-color)"}`;
+      box.innerHTML = `<strong>Final Score: ${score}/30 (${pct.toFixed(0)}%)</strong><br><br>${msg}`;
+      box.scrollIntoView({behavior:'smooth', block:'start'});
+    }
+
+    /***********************
+     * RENDER: Alphabet page
+     ***********************/
+    function renderAlphabet(){
+      const wrap = document.getElementById('alphabetTableWrap');
+      wrap.innerHTML = "";
+      const table = document.createElement('table');
+
+      table.innerHTML = `
+        <thead>
+          <tr>
+            <th>LETTER</th>
+            <th>ENGLISH NAME</th>
+            <th>IPA</th>
+            <th>TECH EXAMPLE</th>
+            <th>NOTE / ERROR</th>
+            <th>AUDIO</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      `;
+
+      const tbody = table.querySelector('tbody');
+
+      alphabetRows.forEach(row => {
+        const [letter, name, ipa, ex, note] = row;
+        const tr = document.createElement('tr');
+
+        tr.innerHTML = `
+          <td><strong style="color:var(--accent-primary)">${letter}</strong></td>
+          <td>"${name}"</td>
+          <td><span class="kbd">${ipa}</span></td>
+          <td>${ex}</td>
+          <td class="muted">${note}</td>
+          <td>
+            <button class="speak-btn" type="button" aria-label="Speak letter name" onclick="speakText('${name}')"><i class="fa-solid fa-volume-up"></i></button>
+            <button class="speak-btn" type="button" aria-label="Speak IPA sample" onclick="speakIPA('${ipa}')"><i class="fa-solid fa-wave-square"></i></button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      wrap.appendChild(table);
+
+      const errors = document.getElementById('alphabetErrors');
+      errors.innerHTML = "";
+      alphabetErrorCards.forEach((e) => {
+        const div = document.createElement('div');
+        div.className = "card card-red";
+        div.innerHTML = `
+          <h4 style="color:var(--error-color); font-family:var(--font-subtitle);">${e.title}</h4>
+          <p class="muted" style="margin-top:10px;"><strong style="color:var(--error-color);">Avoid:</strong> ${e.bad}</p>
+          <p class="muted" style="margin-top:8px;"><strong style="color:var(--accent-primary);">Use:</strong> ${e.good}</p>
+          <p class="muted" style="margin-top:8px;"><strong style="color:var(--accent-secondary);">Tech tip:</strong> ${e.tech}</p>
+        `;
+        errors.appendChild(div);
+      });
+    }
+
+    /***********************
+     * RENDER: Sound system page
+     ***********************/
+    function renderSoundSystem(){
+      const monoGrid = document.getElementById('monoGrid');
+      monoGrid.innerHTML = "";
+      monophthongs.forEach((m, i) => {
+        const card = document.createElement('div');
+        card.className = "card card-blue slide-in";
+        card.style.animationDelay = `${(i%6)*0.06}s`;
+        card.innerHTML = `
+          <h4>
+            <span class="kbd">${m.ipa}</span> — ${m.name}
+            <button class="speak-btn" type="button" aria-label="Speak IPA sample" onclick="speakIPA('${m.ipa}')"><i class="fa-solid fa-volume-up"></i></button>
+          </h4>
+          <p class="muted" style="margin-top:10px;"><strong>Articulation:</strong> ${m.articulation}</p>
+          <p class="muted" style="margin-top:8px;"><strong>General example:</strong> ${m.general}</p>
+          <p class="muted" style="margin-top:8px;"><strong>Cybersecurity example:</strong> ${m.tech}</p>
+          <p class="muted" style="margin-top:8px;"><strong>Common error:</strong> ${m.error}</p>
+        `;
+        monoGrid.appendChild(card);
+      });
+
+      const diphGrid = document.getElementById('diphGrid');
+      diphGrid.innerHTML = "";
+      diphthongs.forEach((d, i) => {
+        const card = document.createElement('div');
+        card.className = "card slide-in";
+        card.style.borderColor = "var(--accent-primary)";
+        card.style.animationDelay = `${i*0.07}s`;
+        card.innerHTML = `
+          <h4>
+            <span class="kbd">${d.ipa}</span> — ${d.name}
+            <button class="speak-btn" type="button" aria-label="Speak IPA sample" onclick="speakIPA('${d.ipa}')"><i class="fa-solid fa-volume-up"></i></button>
+          </h4>
+          <p class="muted" style="margin-top:10px;"><strong>Glide:</strong> ${d.move}</p>
+          <p class="muted" style="margin-top:8px;"><strong>General examples:</strong> ${d.general}</p>
+          <p class="muted" style="margin-top:8px;"><strong>Cybersecurity example:</strong> ${d.tech}</p>
+          <p class="muted" style="margin-top:8px;"><strong>Common error:</strong> ${d.error}</p>
+        `;
+        diphGrid.appendChild(card);
+      });
+
+      function consonantTable(rows){
+        const t = document.createElement('table');
+        t.className = "th-blue";
+        t.innerHTML = `
+          <thead>
+            <tr>
+              <th>IPA</th>
+              <th>Name</th>
+              <th>Articulation</th>
+              <th>Tech example</th>
+              <th>Typical error</th>
+              <th>Audio</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        `;
+        const tb = t.querySelector('tbody');
+        rows.forEach(r => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><span class="kbd">${r.ipa}</span></td>
+            <td>${r.name}</td>
+            <td class="muted">${r.art}</td>
+            <td>${r.tech}</td>
+            <td class="muted">${r.err}</td>
+            <td>
+              <button class="speak-btn" type="button" onclick="speakIPA('${r.ipa}')" aria-label="Speak IPA sample">
+                <i class="fa-solid fa-volume-up"></i>
+              </button>
+              <button class="speak-btn" type="button" onclick="speakText('${r.tech}')" aria-label="Speak example word">
+                <i class="fa-solid fa-microphone-lines"></i>
+              </button>
+            </td>
+          `;
+          tb.appendChild(tr);
+        });
+        return t;
+      }
+
+      const voicedWrap = document.getElementById('voicedTable');
+      const unvoicedWrap = document.getElementById('unvoicedTable');
+      voicedWrap.innerHTML = ""; unvoicedWrap.innerHTML = "";
+      voicedWrap.appendChild(consonantTable(voicedCons));
+      unvoicedWrap.appendChild(consonantTable(unvoicedCons));
+
+      const errs = document.getElementById('soundErrors');
+      errs.innerHTML = "";
+      soundErrorCards.forEach((e, i) => {
+        const div = document.createElement('div');
+        div.className = "card card-red slide-in";
+        div.style.animationDelay = `${i*0.06}s`;
+        div.innerHTML = `
+          <h4 style="color:var(--error-color)">${e.title}</h4>
+          <p class="muted" style="margin-top:10px;">${e.text}</p>
+          <p style="margin-top:10px;">
+            <span class="kbd">${e.example}</span>
+            <button class="speak-btn" type="button" onclick="speakText('${e.example}')" aria-label="Speak example">
+              <i class="fa-solid fa-volume-up"></i>
+            </button>
+          </p>
+        `;
+        errs.appendChild(div);
+      });
+    }
+
+    /***********************
+     * RENDER: Vocabulary page
+     ***********************/
+    function vocabCard(item, borderColor){
+      const card = document.createElement('div');
+      card.className = "card";
+      card.style.borderLeft = `4px solid ${borderColor}`;
+
+      const safeTerm = (item.term || "").replaceAll("\\", "\\\\").replaceAll("'", "\\'");
+      const safeExample = (item.example || "").replaceAll("\\", "\\\\").replaceAll("'", "\\'");
+
+      card.innerHTML = `
+        <h2 style="font-size:22px; color:var(--accent-primary); font-family:var(--font-title);">
+          ${item.term}
+          <button class="speak-btn" type="button" aria-label="Speak term" onclick="speakText('${safeTerm}')">
+            <i class="fa-solid fa-volume-up"></i>
+          </button>
+        </h2>
+        <p class="muted">
+          <strong>IPA:</strong> <span class="kbd">${item.ipa}</span> → "${item.hint}"
+          <button class="speak-btn speak-inline" type="button" aria-label="Speak IPA sample" onclick="speakIPA('${item.ipa}')">
+            <i class="fa-solid fa-wave-square"></i>
+          </button>
+        </p>
+        <p class="muted" style="margin-top:8px;"><strong>Definition (EN):</strong> ${item.def}</p>
+        <p class="muted" style="margin-top:8px;"><strong>Definition (ES):</strong> ${item.esDef}</p>
+        <p class="muted" style="margin-top:8px;">
+          <strong>Example:</strong> <em>${item.example}</em>
+          <button class="speak-btn speak-inline" type="button" aria-label="Speak example sentence" onclick="speakText('${safeExample}')">
+            <i class="fa-solid fa-volume-up"></i>
+          </button>
+        </p>
+        <p class="muted" style="margin-top:8px;"><strong>Pronunciation note:</strong> ${item.detail}</p>
+        <p class="muted" style="margin-top:8px; color:var(--error-color);"><strong>Common mistake:</strong> ${item.common}</p>
+      `;
+      return card;
+    }
+
+    function renderVocabulary(){
+      const attacks = document.getElementById('vocabAttacks');
+      const prot = document.getElementById('vocabProtection');
+      const net = document.getElementById('vocabNetworks');
+
+      attacks.innerHTML = "";
+      prot.innerHTML = "";
+      net.innerHTML = "";
+
+      vocab.attacks.forEach(v => attacks.appendChild(vocabCard(v, "var(--error-color)")));
+      vocab.protection.forEach(v => prot.appendChild(vocabCard(v, "var(--accent-primary)")));
+      vocab.networks.forEach(v => net.appendChild(vocabCard(v, "var(--accent-secondary)")));
+    }
+
+    /***********************
+     * VOCAB EXERCISES + SOLUTION TABLE
+     ***********************/
+    function renderVocabExercises(){
+      const listenQs = [
+        {
+          id:"vl1",
+          prompt:`1. “I need to check the
+            <button class="speak-btn speak-inline" type="button" onclick="speakText('firewall')" aria-label="Play audio: firewall"><i class="fa-solid fa-volume-up"></i></button>
+            settings to block the incoming traffic.”`,
+          options:["Firewall","Firmware","Failover"],
+          correct:0,
+          correctFb:"Correct. Firewall matches the sentence.",
+          wrongFb:"Incorrect. The correct answer is Firewall.",
+          keyText:"Firewall"
+        },
+        {
+          id:"vl2",
+          prompt:`2. “The server was hit by a
+            <button class="speak-btn speak-inline" type="button" onclick="speakText('ransomware')" aria-label="Play audio: ransomware"><i class="fa-solid fa-volume-up"></i></button>
+            attack and all data is locked.”`,
+          options:["Randomware","Ransomware","Malware"],
+          correct:1,
+          correctFb:"Correct. Ransomware encrypts data and demands payment.",
+          wrongFb:"Incorrect. The correct answer is Ransomware.",
+          keyText:"Ransomware"
+        },
+        {
+          id:"vl3",
+          prompt:`3. “Please verify the identity using
+            <button class="speak-btn speak-inline" type="button" onclick="speakText('authentication')" aria-label="Play audio: authentication"><i class="fa-solid fa-volume-up"></i></button>
+            protocols.”`,
+          options:["Authoritative","Authorization","Authentication"],
+          correct:2,
+          correctFb:"Correct. Authentication verifies identity.",
+          wrongFb:"Incorrect. The correct answer is Authentication.",
+          keyText:"Authentication"
+        },
+        {
+          id:"vl4",
+          prompt:`4. “The attacker used a
+            <button class="speak-btn speak-inline" type="button" onclick="speakText('data breach')" aria-label="Play audio: data breach"><i class="fa-solid fa-volume-up"></i></button>
+            to leak the customer records.”`,
+          options:["Data Bridge","Data Breach","Database"],
+          correct:1,
+          correctFb:"Correct. A data breach is unauthorized data access or leakage.",
+          wrongFb:"Incorrect. The correct answer is Data Breach.",
+          keyText:"Data Breach"
+        }
+      ];
+      renderQuiz('quizVocabListen', listenQs);
+
+      const mcQs = [
+        {id:"vm9", prompt:"9. A hacker exploited a vulnerability that the software vendor didn't know about. This is a:", options:["Phishing attack","Zero-day attack","SQL Injection"], correct:1,
+          correctFb:"Correct. A zero-day targets an unknown vulnerability.", wrongFb:"Incorrect. The correct answer is Zero-day attack.", keyText:"Zero-day attack"},
+        {id:"vm10", prompt:"10. To prevent users from being redirected to fake websites, we must secure the:", options:["DNS (Domain Name System)","IP address","Bandwidth"], correct:0,
+          correctFb:"Correct. DNS poisoning can redirect users.", wrongFb:"Incorrect. The correct answer is DNS.", keyText:"DNS (Domain Name System)"},
+        {id:"vm11", prompt:"11. A 'Trojan' is a type of:", options:["Encryption","Router","Malware"], correct:2,
+          correctFb:"Correct. A Trojan is malware.", wrongFb:"Incorrect. The correct answer is Malware.", keyText:"Malware"},
+        {id:"vm12", prompt:"12. Every website needs a ________ to establish a secure HTTPS connection.", options:["Digital certificate","2FA","Protocol"], correct:0,
+          correctFb:"Correct. Certificates help establish trust for HTTPS/TLS.", wrongFb:"Incorrect. The correct answer is Digital certificate.", keyText:"Digital certificate"}
+      ];
+      renderQuiz('quizVocabMC', mcQs);
+
+      const solutions = [
+        {q:1, a:"A) Firewall", exp:"The audio says 'firewall' (a system that controls network traffic)."},
+        {q:2, a:"B) Ransomware", exp:"Ransomware encrypts data and demands payment for decryption."},
+        {q:3, a:"C) Authentication", exp:"Authentication verifies identity."},
+        {q:4, a:"B) Data Breach", exp:"A data breach is unauthorized access or leakage of sensitive records."},
+        {q:5, a:"Brute force attack", exp:"Systematic password guessing (trial and error)."},
+        {q:6, a:"Decryption", exp:"The reverse of encryption: ciphertext back to plaintext."},
+        {q:7, a:"Security patch", exp:"A patch fixes security vulnerabilities."},
+        {q:8, a:"Switch", exp:"A switch connects devices in a LAN (MAC addresses)."},
+        {q:9, a:"B) Zero-day attack", exp:"The vulnerability was unknown to the vendor (0 days notice)."},
+        {q:10, a:"A) DNS", exp:"DNS translates domains to IP; if attacked, you can be redirected."},
+        {q:11, a:"C) Malware", exp:"Malware is the umbrella term that includes trojans, spyware, ransomware, etc."},
+        {q:12, a:"A) Digital certificate", exp:"Certificates help establish trust for HTTPS/TLS connections."}
+      ];
+
+      const tblWrap = document.getElementById('vocabSolutionsTable');
+      const t = document.createElement('table');
+      t.innerHTML = `
+        <thead>
+          <tr>
+            <th>Question</th>
+            <th>Correct answer</th>
+            <th>Technical explanation</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      `;
+      const tb = t.querySelector('tbody');
+      solutions.forEach(s => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${s.q}</td><td><strong>${s.a}</strong></td><td class="muted">${s.exp}</td>`;
+        tb.appendChild(tr);
+      });
+      tblWrap.innerHTML = "";
+      tblWrap.appendChild(t);
+    }
+
+    /***********************
+     * RENDER: Exercises
+     ***********************/
+    function renderPractices(){
+      const p1 = [
+        {id:"p1q1", prompt:"1. The vowel in <span class='kbd'>firewall</span> (first syllable “fi-”) is:", options:["/ɪ/","/aɪ/","/iː/","/æ/"], correct:1, correctFb:"Correct. 'fire' uses /aɪ/.", wrongFb:"Incorrect. The correct answer is /aɪ/.", keyText:"/aɪ/"},
+        {id:"p1q2", prompt:"2. The initial sound in <span class='kbd'>phishing</span> is:", options:["/p/","/ph/","/f/","/v/"], correct:2, correctFb:"Correct. 'ph' = /f/ in English.", wrongFb:"Incorrect. The correct answer is /f/.", keyText:"/f/"},
+        {id:"p1q3", prompt:"3. The suffix <span class='kbd'>-tion</span> in <span class='kbd'>encryption</span> sounds like:", options:["/tɪon/","/ʃən/","/sɪon/","/tion/"], correct:1, correctFb:"Correct. '-tion' is /ʃən/.", wrongFb:"Incorrect. The correct answer is /ʃən/.", keyText:"/ʃən/"},
+        {id:"p1q4", prompt:"4. The <span class='kbd'>th</span> in <span class='kbd'>threat</span> is pronounced:", options:["/t/","/d/","/θ/","/ð/"], correct:2, correctFb:"Correct. 'threat' uses /θ/ (unvoiced).", wrongFb:"Incorrect. The correct answer is /θ/.", keyText:"/θ/"},
+        {id:"p1q5", prompt:"5. The schwa <span class='kbd'>/ə/</span> commonly appears in:", options:["authentication (unstressed syllables)","server (first syllable)","bit","see"], correct:0, correctFb:"Correct. 'authentication' contains schwa in unstressed syllables.", wrongFb:"Incorrect. The correct answer is authentication.", keyText:"authentication"}
+      ];
+      renderQuiz('quizPractice1', p1);
+
+      const sentences = [
+        {n:1, text:"The company's ________ prevented the attack from entering the network.", ans:"firewall", fb:"Firewall = a barrier that controls network traffic."},
+        {n:2, text:"Users were tricked by a ________ email that looked like it came from their bank.", ans:"phishing", fb:"Phishing = deception via fake messages."},
+        {n:3, text:"The hospital paid the ransom after ________ locked all their files.", ans:"ransomware", fb:"Ransomware = malware that encrypts files and demands payment."},
+        {n:4, text:"Your password is stored using ________ so we cannot read it.", ans:"encryption", fb:"Encryption = converting data into ciphertext."},
+        {n:5, text:"Enable two-factor ________ to add an extra layer of security.", ans:"authentication", fb:"Authentication = identity verification."}
+      ];
+      const p2Form = document.getElementById('practice2Form');
+      p2Form.innerHTML = sentences.map(s => `
+        <div class="quiz-question">
+          <h5>${s.n}. ${s.text}</h5>
+          <input type="text" name="p2q${s.n}" placeholder="Type the word..." />
+          <p class="muted" style="margin-top:8px;"><strong>Tip:</strong> ${s.fb}</p>
+        </div>
+      `).join('');
+
+      const key2 = document.getElementById('keyList-practice2');
+      key2.innerHTML = "";
+      sentences.forEach(s => {
+        const li = document.createElement('li');
+        li.innerHTML = `<strong>Q${s.n}:</strong> ${s.ans} <span class="muted">— ${s.fb}</span>`;
+        key2.appendChild(li);
+      });
+
+      const p3 = [
+        {id:"p3q1", prompt:"1. What was the initial attack used?", options:["DDoS","Phishing","Brute force","Zero-day"], correct:1,
+          correctFb:"Correct. The fraudulent email is phishing.", wrongFb:"Incorrect. The correct answer is Phishing.", keyText:"Phishing"},
+        {id:"p3q2", prompt:"2. What type of data was stolen?", options:["System passwords","Customer records","Software","Router configuration"], correct:1,
+          correctFb:"Correct. The stolen data were customer records.", wrongFb:"Incorrect. The correct answer is Customer records.", keyText:"Customer records"},
+        {id:"p3q3", prompt:"3. What malware encrypted the backups?", options:["Ransomware","Antivirus","Firewall","Spyware"], correct:0,
+          correctFb:"Correct. Encrypting backups and demanding money is ransomware.", wrongFb:"Incorrect. The correct answer is Ransomware.", keyText:"Ransomware"},
+        {id:"p3q4", prompt:"4. What measure could have prevented the initial access?", options:["Better server","Two-factor authentication (2FA)","More bandwidth","New router"], correct:1,
+          correctFb:"Correct. 2FA helps even if the password is stolen.", wrongFb:"Incorrect. The correct answer is Two-factor authentication (2FA).", keyText:"2FA"},
+        {id:"p3q5", prompt:"5. What term describes the unauthorized theft of records?", options:["Data breach","Encryption","Protocol","DNS"], correct:0,
+          correctFb:"Correct. Unauthorized access/leak of records is a data breach.", wrongFb:"Incorrect. The correct answer is Data breach.", keyText:"Data breach"}
+      ];
+      renderQuiz('quizPractice3', p3);
+    }
+
+    /***********************
+     * RENDER: Reading quizzes
+     ***********************/
+    function renderReadingQuizzes(){
+      const r1 = [
+        {id:"r1q1", prompt:"1. What is the main goal of cybersecurity?", options:["Only protect passwords","Protect systems, networks, and programs from digital attacks","Create malware","Improve internet speed"], correct:1},
+        {id:"r1q2", prompt:"2. Why is cybersecurity challenging today?", options:["There are few experts","More connected devices and more innovative attackers","The internet is slow","There are no laws"], correct:1},
+        {id:"r1q3", prompt:"3. A successful approach often uses:", options:["A single tool","Defense-in-depth (multiple layers)","Only antivirus","Only backups"], correct:1},
+        {id:"r1q4", prompt:"4. Which three elements must complement each other?", options:["People, processes, and technology","Hardware, software, and data","Firewalls, VPNs, and routers","Users and administrators"], correct:0},
+        {id:"r1q5", prompt:"5. What is the first step toward a resilient posture?", options:["Understanding the threats","Buying expensive antivirus","Disconnecting from the internet","Hiring more staff"], correct:0}
+      ].map((q) => ({...q, correctFb:"Correct.", wrongFb:"Incorrect.", keyText:q.options[q.correct]}));
+      renderQuiz('quizReading1', r1);
+
+      const r2 = [
+        {id:"r2q1", prompt:"1. Encryption converts:", options:["Plaintext into ciphertext","Files into images","Data into binary only","HTML into CSS"], correct:0},
+        {id:"r2q2", prompt:"2. Symmetric vs asymmetric encryption:", options:["Symmetric uses one key; asymmetric uses two keys","Both use the same key","Asymmetric is always faster","Only asymmetric uses algorithms"], correct:0},
+        {id:"r2q3", prompt:"3. Public-key cryptography means:", options:["No keys are used","A public key encrypts and a private key decrypts","Passwords are visible","All keys are shared publicly"], correct:1},
+        {id:"r2q4", prompt:"4. HTTPS uses ________ to establish an encrypted connection.", options:["FTP","TLS","HTTP","ICMP"], correct:1},
+        {id:"r2q5", prompt:"5. Ciphertext is:", options:["Readable data","Encoded, unreadable data","A firewall rule","A domain name"], correct:1}
+      ].map(q => ({...q, correctFb:"Correct.", wrongFb:"Incorrect.", keyText:q.options[q.correct]}));
+      renderQuiz('quizReading2', r2);
+    }
+
+    /***********************
+     * RENDER: Alphabet quiz
+     ***********************/
+    function renderAlphabetQuiz(){
+      const q = [
+        {id:"aq1", prompt:'1. How do you pronounce the letter <span class="kbd">J</span> in American English?', options:["Spanish /x/","/dʒeɪ/ “jay”","/ʒ/","/j/"], correct:1, correctFb:"Correct: /dʒeɪ/ “jay”.", wrongFb:"Incorrect. The correct answer is /dʒeɪ/ “jay”."},
+        {id:"aq2", prompt:'2. What is the name of the letter <span class="kbd">W</span> in English?', options:["double ve","vee-vee","double-u","uve doble"], correct:2, correctFb:"Correct: double-u.", wrongFb:"Incorrect. The correct answer is double-u."},
+        {id:"aq3", prompt:'3. Americans call the letter <span class="kbd">Z</span>:', options:["zee /ziː/","zed","zeta","ze"], correct:0, correctFb:"Correct: zee /ziː/.", wrongFb:"Incorrect. The correct answer is zee /ziː/."},
+        {id:"aq4", prompt:'4. The name of the letter <span class="kbd">H</span> in English is:', options:["hache","hee","aitch /eɪtʃ/","ach"], correct:2, correctFb:"Correct: aitch /eɪtʃ/.", wrongFb:"Incorrect. The correct answer is aitch /eɪtʃ/."},
+        {id:"aq5", prompt:'5. The letter <span class="kbd">U</span> sounds like:', options:["oo","you /juː/","u","uh"], correct:1, correctFb:"Correct: you /juː/.", wrongFb:"Incorrect. The correct answer is you /juː/."},
+        {id:"aq6", prompt:'6. <span class="kbd">HTTPS</span> is spelled in English as:', options:["hache-te-te-pe-ese","aitch-tee-tee-pee-ess","h-t-t-p-s","heh-teh-teh-peh-ess"], correct:1, correctFb:"Correct: aitch-tee-tee-pee-ess.", wrongFb:"Incorrect. The correct answer is aitch-tee-tee-pee-ess."},
+        {id:"aq7", prompt:'7. <span class="kbd">VPN</span> in English is read as:', options:["uve-pe-ene","vee-pee-en","ve-pe-ne","bi-pi-ni"], correct:1, correctFb:"Correct: vee-pee-en.", wrongFb:"Incorrect. The correct answer is vee-pee-en."},
+        {id:"aq8", prompt:'8. <span class="kbd">SQL</span> is spelled as:', options:["ese-cu-ele","ess-cue-el","sí-kiú-el","es-ke-el"], correct:1, correctFb:"Correct: ess-cue-el.", wrongFb:"Incorrect. The correct answer is ess-cue-el."},
+        {id:"aq9", prompt:'9. <span class="kbd">DNS</span> in English is:', options:["de-ene-ese","dee-en-ess","di-ni-si","d-n-s"], correct:1, correctFb:"Correct: dee-en-ess.", wrongFb:"Incorrect. The correct answer is dee-en-ess."},
+        {id:"aq10", prompt:'10. The letter <span class="kbd">I</span> in American English is called:', options:["ee","eye /aɪ/","ih","i"], correct:1, correctFb:"Correct: eye /aɪ/.", wrongFb:"Incorrect. The correct answer is eye /aɪ/."}
+      ].map(x => ({...x, keyText: x.options[x.correct]}));
+
+      renderQuiz('quizAlphabet', q);
+    }
+
+    /***********************
+     * RENDER: Sound system quiz (15)
+     ***********************/
+    function renderSoundQuiz(){
+      const q = [
+        {id:"sq1", prompt:"1. Which IPA symbol matches the vowel in <span class='kbd'>seat</span>?", options:["/ɪ/","/iː/","/ɛ/","/æ/"], correct:1,
+          correctFb:"✅ /iː/ is the long vowel, like in 'see'.",
+          wrongFb:"❌ /iː/ is the long sound. /ɪ/ is short like in 'sit'."},
+        {id:"sq2", prompt:"2. Which symbol represents the schwa?", options:["/ɛ/","/ʌ/","/ə/","/iː/"], correct:2,
+          correctFb:"✅ Schwa /ə/ is the most common unstressed vowel.",
+          wrongFb:"❌ Schwa is /ə/ (neutral sound, as in 'about')."},
+        {id:"sq3", prompt:"3. In <span class='kbd'>malware</span> /ˈmælˌwɛr/, the 'a' is:", options:["/æ/","/ɑː/","/ə/","/eɪ/"], correct:0,
+          correctFb:"✅ Correct. 'mal-' uses /æ/ (like 'cat').",
+          wrongFb:"❌ The correct answer is /æ/."},
+        {id:"sq4", prompt:"4. What diphthong appears in <span class='kbd'>firewall</span>?", options:["/oʊ/","/aɪ/","/eɪ/","/aʊ/"], correct:1,
+          correctFb:"✅ 'fire' begins with /aɪ/: /ˈfaɪɚˌwɔːl/.",
+          wrongFb:"❌ The correct answer is /aɪ/."},
+        {id:"sq5", prompt:"5. The sound <span class='kbd'>/ɝ/</span> in <span class='kbd'>server</span> is:", options:["Spanish trilled R","American retroflex R-colored vowel","Schwa","Diphthong"], correct:1,
+          correctFb:"✅ /ɝ/ is American r-colored (retroflex).",
+          wrongFb:"❌ The correct answer is American retroflex R-colored vowel."},
+        {id:"sq6", prompt:"6. Is <span class='kbd'>/θ/</span> in <span class='kbd'>threat</span> voiced or unvoiced?", options:["Voiced","Unvoiced"], correct:1,
+          correctFb:"✅ /θ/ is unvoiced. /ð/ is voiced (as in 'the').",
+          wrongFb:"❌ /θ/ is unvoiced."},
+        {id:"sq7", prompt:"7. Which consonant is voiced?", options:["/p/","/s/","/v/","/θ/"], correct:2,
+          correctFb:"✅ /v/ is voiced (labiodental), as in 'vulnerability'.",
+          wrongFb:"❌ The correct answer is /v/."},
+        {id:"sq8", prompt:"8. In <span class='kbd'>zero-day</span>, the initial sound is:", options:["/z/ (voiced)","/s/ (unvoiced)"], correct:0,
+          correctFb:"✅ 'zero' begins with /z/ voiced.",
+          wrongFb:"❌ The correct answer is /z/."},
+        {id:"sq9", prompt:"9. The sound <span class='kbd'>/ŋ/</span> in <span class='kbd'>phishing</span> is:", options:["Voiced nasal","Unvoiced"], correct:0,
+          correctFb:"✅ /ŋ/ is voiced and nasal.",
+          wrongFb:"❌ /ŋ/ is a voiced nasal."},
+        {id:"sq10", prompt:"10. Difference between <span class='kbd'>/tʃ/</span> and <span class='kbd'>/dʒ/</span>:", options:["/tʃ/ unvoiced, /dʒ/ voiced","/tʃ/ voiced, /dʒ/ unvoiced","Both voiced","Both unvoiced"], correct:0,
+          correctFb:"✅ /tʃ/ (architecture) vs /dʒ/ (injection).",
+          wrongFb:"❌ The correct answer is /tʃ/ unvoiced, /dʒ/ voiced."},
+        {id:"sq11", prompt:"11. How is <span class='kbd'>th</span> pronounced in <span class='kbd'>authentication</span>?", options:["Like 't'","/θ/ tongue between teeth","Like 's'","Like 'd'"], correct:1,
+          correctFb:"✅ 'auth' → /θ/. Tongue lightly between teeth.",
+          wrongFb:"❌ The correct answer is /θ/."},
+        {id:"sq12", prompt:"12. IPA transcription of <span class='kbd'>cloud</span>:", options:["/klod/","/klaʊd/","/kluːd/","/kleɪd/"], correct:1,
+          correctFb:"✅ /klaʊd/ with diphthong /aʊ/.",
+          wrongFb:"❌ The correct answer is /klaʊd/."},
+        {id:"sq13", prompt:"13. A typical error when pronouncing <span class='kbd'>hacker</span> is:", options:["Making the 'a' long","Using a strong Spanish 'j' sound","Not pronouncing 'r'","Stressing the second syllable"], correct:1,
+          correctFb:"✅ /h/ is soft air. Do not use a strong Spanish 'j'.",
+          wrongFb:"❌ The correct answer is using a strong Spanish 'j' sound."},
+        {id:"sq14", prompt:"14. In <span class='kbd'>encryption</span> /ɪnˈkrɪpʃən/, how many schwa /ə/ are there?", options:["0","1","2","3"], correct:1,
+          correctFb:"✅ There is 1 schwa in '-tion' → /ʃən/.",
+          wrongFb:"❌ The correct answer is 1."},
+        {id:"sq15", prompt:"15. Correct American pronunciation of <span class='kbd'>router</span>:", options:["/ˈruːtɛr/","/ˈraʊtɚ/ (American)","/ˈroʊtɚ/ (British)","/ruˈtɛr/"], correct:1,
+          correctFb:"✅ American: /ˈraʊtɚ/ (diphthong /aʊ/ + schwa-r /ɚ/).",
+          wrongFb:"❌ The correct answer is /ˈraʊtɚ/."}
+      ].map(x => ({...x, keyText: x.options[x.correct]}));
+
+      renderQuiz('quizSounds', q);
+    }
+
+    /***********************
+     * RENDER: Final exam form + key
+     ***********************/
+    function renderFinal(){
+      const form = document.getElementById('quizFinal');
+      form.innerHTML = "";
+
+      const readingIntro = document.createElement('div');
+      readingIntro.className = "card";
+      readingIntro.style.marginBottom = "14px";
+      readingIntro.innerHTML = `
+        <h3 style="margin-bottom:10px;">Reading passage (for Section 3)</h3>
+        <p class="muted" style="background:rgba(255,255,255,.05); padding:14px; border-radius:6px;">
+          “Modern cybersecurity relies on a defense-in-depth strategy, which means deploying multiple security layers so that if one
+          control fails, others still protect the asset. This approach combines technical controls (firewalls, IDS, encryption),
+          administrative controls (policies, training, audits), and physical controls (access cards, surveillance cameras,
+          secure facilities).”
+        </p>
+      `;
+      form.appendChild(readingIntro);
+
+      const sections = ["PHONETICS","VOCABULARY","READING"];
+      sections.forEach(sec => {
+        const header = document.createElement('h3');
+        header.style.color = "var(--accent-secondary)";
+        header.style.margin = "20px 0 8px";
+        header.textContent = `SECTION: ${sec}`;
+        form.appendChild(header);
+
+        finalQuestions.filter(q => q.section === sec).forEach(q => {
+          const box = document.createElement('div');
+          box.className = "quiz-question";
+          const opts = q.options.map((o, i) => `<label><input type="radio" name="${q.id}" value="${i}"> ${o}</label>`).join("");
+          box.innerHTML = `
+            <h5>${q.prompt}</h5>
+            <div class="quiz-options">${opts}</div>
+          `;
+          form.appendChild(box);
+        });
+      });
+
+      const keyList = document.getElementById('keyList-quizFinal');
+      keyList.innerHTML = "";
+      finalQuestions.forEach((q, i) => {
+        const li = document.createElement('li');
+        li.innerHTML = `<strong>Q${i+1}:</strong> ${q.options[q.correct]}`;
+        keyList.appendChild(li);
+      });
+    }
+
+    /***********************
+     * COMMENTS (localStorage) + SEEDED REVIEW
+     ***********************/
+    let currentStars = 0;
+
+    function setStars(n){
+      currentStars = n;
+      document.getElementById('ratingVal').value = n ? String(n) : "";
+
+      document.querySelectorAll('.stars button').forEach(btn => {
+        const s = parseInt(btn.dataset.star, 10);
+        btn.classList.toggle('active', s <= n);
+      });
+    }
+
+    function loadReviews(){
+      const seed = [
+        {
+          name:"Yoel Palacio",
+          rating:5,
+          comment:"Good resource for learning cybersecurity vocabulary in English. The phonetics section is incredible.",
+          dateLabel:"February 18, 2026"
+        }
+      ];
+
+      let stored = [];
+      try{
+        stored = JSON.parse(localStorage.getItem('cybereng_reviews') || "[]");
+      }catch(e){ stored = []; }
+
+      return [...seed, ...stored];
+    }
+
+    function saveReview(r){
+      let stored = [];
+      try{
+        stored = JSON.parse(localStorage.getItem('cybereng_reviews') || "[]");
+      }catch(e){ stored = []; }
+      stored.unshift(r);
+      localStorage.setItem('cybereng_reviews', JSON.stringify(stored));
+    }
+
+    function renderReviews(){
+      const gallery = document.getElementById('reviewGallery');
+      gallery.innerHTML = "";
+
+      const reviews = loadReviews();
+      reviews.forEach(r => {
+        const card = document.createElement('div');
+        card.className = "card";
+        card.style.borderColor = "rgba(204,204,204,.35)";
+        card.style.marginBottom = "12px";
+
+        const stars = "★★★★★".slice(0, r.rating).padEnd(5, "☆");
+        card.innerHTML = `
+          <div style="color:var(--accent-primary); font-size:20px; letter-spacing:1px;">${stars}</div>
+          <p class="muted" style="margin:10px 0; font-style:italic;">"${escapeHtml(r.comment)}"</p>
+          <h4 style="font-size:14px;">– ${escapeHtml(r.name)}</h4>
+          <p style="font-size:12px; color:gray;">${escapeHtml(r.dateLabel || "Recently")}</p>
+        `;
+        gallery.appendChild(card);
+      });
+    }
+
+    function escapeHtml(str){
+      return String(str).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;");
+    }
+
+    function submitReview(e){
+      e.preventDefault();
+      const form = document.getElementById('reviewForm');
+      const data = new FormData(form);
+
+      const name = (data.get('fullName') || "").toString().trim();
+      const rating = parseInt((data.get('rating') || "0").toString(), 10);
+      const comment = (data.get('comment') || "").toString().trim();
+
+      if(!name || !rating || comment.length < 20){
+        alert("Please complete the required fields (name, rating, and a comment of at least 20 characters).");
+        return;
+      }
+
+      saveReview({
+        name,
+        rating,
+        comment,
+        dateLabel: new Date().toLocaleDateString('en-US', {year:'numeric', month:'long', day:'numeric'})
+      });
+
+      document.getElementById('reviewSuccess').style.display = "block";
+      form.reset();
+      setStars(0);
+      renderReviews();
+    }
+
+    /***********************
+     * INIT
+     ***********************/
+    function init(){
+      // warm up voices list (some browsers need this)
+      if('speechSynthesis' in window){
+        window.speechSynthesis.getVoices();
+        window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+      }
+
+      renderAlphabet();
+      renderAlphabetQuiz();
+
+      renderSoundSystem();
+      renderSoundQuiz();
+
+      renderVocabulary();
+      renderVocabExercises();
+
+      renderReadingQuizzes();
+      renderPractices();
+
+      renderFinal();
+
+      renderReviews();
+    }
+    init();
+  </script>
+</body>
+</html>
